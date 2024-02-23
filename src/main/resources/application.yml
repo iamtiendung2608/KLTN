@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:15432/blockchain
+    username: blockchain
+    password: blockchain
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    change-log: db/changelog/db.changelog-master.xml
+    database-change-log-lock-table: database_changelog_lock
+    database-change-log-table: database_changelog
+
+springdoc:
+  swagger-ui:
+    enabled: true

@@ -1,0 +1,11 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=blockchain
+      - POSTGRES_PASSWORD=blockchain
+      - POSTGRES_DB=blockchain
+    ports:
+      - "15432:5432"
