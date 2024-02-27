@@ -2,11 +2,43 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
   <changeSet id="1.0.1" author="dung.pham">
-    <createTable tableName="user">
-      <column name="id" type="integer"/>
+    <createTable tableName="users">
+      <column name="id" type="serial"/>
+      <column name="email" type="varchar(255)"/>
+      <column name="password" type="varchar(255)"/>
+      <column name="status" type="varchar(255)"/>
     </createTable>
+    
+    <createTable tableName="role">
+      <column name="id" type="serial"/>
+      <column name="role_code" type="varchar(32)"/>
+      <column name="role_name" type="varchar(32)"/>
+      <column name="description" type="text"/>
+    </createTable>
+    
+    <createTable tableName="user_roles">
+      <column name="user_id" type="integer"/>
+      <column name="role_id" type="integer"/>
+    </createTable>
+    
+    <addPrimaryKey tableName="users" columnNames="id"/>
+    <addPrimaryKey tableName="role" columnNames="id"/>
+    
+    <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="user_id" constraintName="user_roles_user_id_fk"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+    <addForeignKeyConstraint baseTableName="user_roles" baseColumnNames="role_id" constraintName="user_roles_role_id_fk"
+                             referencedTableName="role"
+                             referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="dung.pham" author="1.0.2">
+    <sql>
+      insert into role (role_code, role_name, description) values ('user', 'User', '');
+      insert into role (role_code, role_name, description) values ('super_admin', 'Super Admin', '');
+    </sql>
   </changeSet>
 </databaseChangeLog>

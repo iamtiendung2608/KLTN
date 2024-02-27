@@ -12,3 +12,8 @@ spring:
 springdoc:
   swagger-ui:
     enabled: true
+
+app:
+  auth:
+    tokenSecret: tiger_crystal
+    tokenExpirationMsec: 864000000
