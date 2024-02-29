@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.VERIFY_USER),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.SIGNUP),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.FORGOT_PASSWORD),
+            new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.RESEND_VERIFICATION),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.RESET_PASSWORD));
 
     private TokenAuthenticationFilter tokenAuthenticationFilter;

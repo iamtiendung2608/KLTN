@@ -35,10 +35,30 @@
                              referencedColumnNames="id"/>
   </changeSet>
 
-  <changeSet id="dung.pham" author="1.0.2">
+  <changeSet id="1.0.2" author="dung.pham">
     <sql>
       insert into role (role_code, role_name, description) values ('user', 'User', '');
       insert into role (role_code, role_name, description) values ('super_admin', 'Super Admin', '');
     </sql>
+  </changeSet>
+
+  <changeSet id="1.0.3" author="dung.pham">
+    <createTable tableName="verification">
+      <column name="id" type="serial"/>
+      <column name="user_id" type="integer"/>
+      <column name="is_verified" type="boolean" defaultValue="false"/>
+      <column name="code" type="varchar(6)"/>
+      <column name="verified_at" type="timestamp"/>
+      <column name="last_send_at" type="timestamp"/>
+      <column name="created_at" type="timestamp"/>
+      <column name="updated_at" type="timestamp"/>
+    </createTable>
+
+    <addPrimaryKey tableName="verification" columnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="verification" baseColumnNames="user_id"
+                             constraintName="verification_user_id_fk"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
   </changeSet>
 </databaseChangeLog>

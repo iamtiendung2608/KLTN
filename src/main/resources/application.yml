@@ -8,12 +8,24 @@ spring:
     change-log: db/changelog/db.changelog-master.xml
     database-change-log-lock-table: database_changelog_lock
     database-change-log-table: database_changelog
+  mail:
+    host: smtp.gmail.com
+    username: ptdung2608@gmail.com
+    password: nlspvsnrakpuugxf
+    port: 587
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 springdoc:
   swagger-ui:
     enabled: true
 
 app:
+  mail-from: ptdung2608@gmail.com
+  email-prefix: Shipment-system
   auth:
     tokenSecret: tiger_crystal
     tokenExpirationMsec: 864000000
+verification:
+  waiting: 90

@@ -14,7 +14,12 @@ public enum ErrorMessage {
     UNKNOWN_ERROR("ERR_CM_0001", "Internal server error. Please try again", HttpStatus.INTERNAL_SERVER_ERROR),
     INTERNAL_SERVER_ERROR("Internal Server Error", "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR),
     RESOURCE_NOT_FOUND("ERR_NF_0001", "%s not found", HttpStatus.NOT_FOUND),
-    RESOURCE_EXISTS("ERR_UE_0001", "%s exsited", HttpStatus.CONFLICT);
+    USER_VERIFIED("ERR_UV_0001", "%s is verified", HttpStatus.INTERNAL_SERVER_ERROR),
+    INVALID_VERIFICATION_CODE("ERR_UC_0001", "Invalid verification code", HttpStatus.INTERNAL_SERVER_ERROR),
+    RESOURCE_EXISTS("ERR_UE_0001", "%s exsited", HttpStatus.CONFLICT),
+    WAITING_UNDER_ALLOWED("ERR_WUA_0001", "", HttpStatus.BAD_REQUEST),
+    CONFIRM_PASSWORD_MISMATCH("", "New password and confirm password mismatch", HttpStatus.BAD_REQUEST),
+    OLD_PASSWORD_MISMATCH("ERR_OPM_0001", "Old password mismatch for user: %s", HttpStatus.BAD_REQUEST);
     private String code;
 
     @Getter

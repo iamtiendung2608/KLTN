@@ -4,13 +4,16 @@ import com.block_chain.KLTN.common.AppConstant;
 import com.block_chain.KLTN.domain.auth.SignUpRequest;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
+import com.block_chain.KLTN.domain.verification.VerifyService;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+import com.block_chain.KLTN.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +25,11 @@ public class DefaultUserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final VerifyService verifyService;
 
+    @Transactional
     @Override
-    public ResponseEntity<Void> signUp(SignUpRequest request) {
+    public ResponseEntity<Long> signUp(SignUpRequest request) {
         Optional<UserEntity> optUser = userRepository.findByEmail(request.email());
         List<RoleEntity> roles = roleRepository.findAll();
         if (optUser.isPresent()) {
@@ -37,10 +42,28 @@ public class DefaultUserServiceImpl implements UserService {
         UserEntity user = UserEntity.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .status(UserStatus.ACTIVE)
+                .status(UserStatus.INACTIVE)
                 .build();
         user.addRole(role);
         userRepository.save(user);
-        return ResponseEntity.noContent().build();
+        verifyService.createVerify(user);
+        return ResponseEntity.ok(user.getId());
+    }
+
+    @Override
+    public ResponseEntity<?> changePassword(UserPrincipal user, ChangePasswordRequest request) {
+        UserEntity userEntity = userRepository.findById(user.getId())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
+
+        if (!passwordEncoder.matches(request.oldPassword(), userEntity.getPassword())) {
+            throw new BusinessException(ErrorMessage.OLD_PASSWORD_MISMATCH, userEntity.getEmail());
+        }
+
+        if (!passwordEncoder.matches(request.oldPassword(), request.confirmPassword())) {
+            throw new BusinessException(ErrorMessage.CONFIRM_PASSWORD_MISMATCH);
+        }
+        userEntity.setPassword(passwordEncoder.encode(request.newPassword()));
+        userRepository.save(userEntity);
+        return ResponseEntity.ok("Change password successfully");
     }
 }
