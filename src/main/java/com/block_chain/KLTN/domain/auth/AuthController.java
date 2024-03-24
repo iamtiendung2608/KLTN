@@ -28,7 +28,7 @@ public class AuthController {
     private final VerifyService verifyService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Long> signUp(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
         return userService.signUp(request);
     }
 
@@ -40,16 +40,16 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
-    @PostMapping("/verify/{id}")
-    public ResponseEntity<?> verify(@Valid @RequestBody VerifyRequest request, @PathVariable("id") Long id) {
-        return verifyService.verify(id, request);
+    @PostMapping("/verify")
+    public ResponseEntity<?> verify(@Valid @RequestBody VerifyRequest request) {
+        return verifyService.verify(request);
     }
 
-    @PostMapping("/resend-verification/{id}")
-    public ResponseEntity<?> resendVerification(@PathVariable("id") Long id) {
-        return verifyService.resendVerification(id);
+    @PostMapping("/resend-verification")
+    public ResponseEntity<?> resendVerification(@Valid @RequestBody ResendOTPRequest request) {
+        return verifyService.resendVerification(request);
     }
-    
+
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest request, @Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user) {
         return userService.changePassword(user, request);

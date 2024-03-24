@@ -2,6 +2,7 @@ package com.block_chain.KLTN.domain.verification;
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.block_chain.KLTN.common.properties.VerificationProperties;
+import com.block_chain.KLTN.domain.auth.ResendOTPRequest;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.domain.user.UserStatus;
@@ -50,8 +51,8 @@ public class DefaultVerifyServiceImpl implements VerifyService {
 
     @Transactional
     @Override
-    public ResponseEntity<?> verify(Long id, VerifyRequest request) {
-        VerifyEntity verification = verifyRepository.findByUserId(id)
+    public ResponseEntity<?> verify(VerifyRequest request) {
+        VerifyEntity verification = verifyRepository.findByUserId(request.id())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Verification"));
 
         if (verification.isVerified()) {
@@ -66,7 +67,7 @@ public class DefaultVerifyServiceImpl implements VerifyService {
         verification.setVerifiedAt(OffsetDateTime.now());
         verifyRepository.save(verification);
 
-        UserEntity user = userRepository.findById(id)
+        UserEntity user = userRepository.findById(verification.getUserId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
         user.setStatus(UserStatus.ACTIVE);
 
@@ -75,8 +76,8 @@ public class DefaultVerifyServiceImpl implements VerifyService {
 
     @Transactional
     @Override
-    public ResponseEntity<?> resendVerification(Long id) {
-        VerifyEntity verification = verifyRepository.findByUserId(id)
+    public ResponseEntity<?> resendVerification(ResendOTPRequest request) {
+        VerifyEntity verification = verifyRepository.findByUserId(request.id())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Verification"));
 
         if (verification.isVerified()) {

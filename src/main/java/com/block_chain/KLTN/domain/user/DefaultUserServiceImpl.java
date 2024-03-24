@@ -2,6 +2,7 @@ package com.block_chain.KLTN.domain.user;
 
 import com.block_chain.KLTN.common.AppConstant;
 import com.block_chain.KLTN.domain.auth.SignUpRequest;
+import com.block_chain.KLTN.domain.auth.SignUpResponse;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
 import com.block_chain.KLTN.domain.verification.VerifyService;
@@ -29,7 +30,7 @@ public class DefaultUserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public ResponseEntity<Long> signUp(SignUpRequest request) {
+    public ResponseEntity<SignUpResponse> signUp(SignUpRequest request) {
         Optional<UserEntity> optUser = userRepository.findByEmail(request.email());
         List<RoleEntity> roles = roleRepository.findAll();
         if (optUser.isPresent()) {
@@ -47,7 +48,7 @@ public class DefaultUserServiceImpl implements UserService {
         user.addRole(role);
         userRepository.save(user);
         verifyService.createVerify(user);
-        return ResponseEntity.ok(user.getId());
+        return ResponseEntity.ok(new SignUpResponse(user.getId()));
     }
 
     @Override

@@ -1,12 +1,13 @@
 package com.block_chain.KLTN.domain.verification;
 
+import com.block_chain.KLTN.domain.auth.ResendOTPRequest;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import org.springframework.http.ResponseEntity;
 
 public interface VerifyService {
-    ResponseEntity<?> verify(Long id, VerifyRequest request);
+    ResponseEntity<?> verify(VerifyRequest request);
 
-    ResponseEntity<?> resendVerification(Long id);
+    ResponseEntity<?> resendVerification(ResendOTPRequest id);
 
     void createVerify(UserEntity user);
 }

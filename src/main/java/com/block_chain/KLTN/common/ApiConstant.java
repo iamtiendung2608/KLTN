@@ -6,9 +6,9 @@ public class ApiConstant {
     public static final String LOGIN = "/login";
     public static final String SIGNUP = "/signup";
     public static final String CONFIRM_SIGNUP = "/confirm-signup";
-    public static final String VERIFY_USER = "/verify/*";
+    public static final String VERIFY_USER = "/verify";
 
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
-    public static final String RESEND_VERIFICATION = "/resend-verification/*";
+    public static final String RESEND_VERIFICATION = "/resend-verification";
 }

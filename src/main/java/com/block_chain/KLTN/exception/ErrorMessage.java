@@ -19,6 +19,10 @@ public enum ErrorMessage {
     RESOURCE_EXISTS("ERR_UE_0001", "%s exsited", HttpStatus.CONFLICT),
     WAITING_UNDER_ALLOWED("ERR_WUA_0001", "", HttpStatus.BAD_REQUEST),
     CONFIRM_PASSWORD_MISMATCH("", "New password and confirm password mismatch", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST_PARAMETER("ERR_CM_0003", "Invalid parameter(s): %s", HttpStatus.BAD_REQUEST),
+    DISABLED_USER("ERR_ACC_0006", "User is disabled.", HttpStatus.BAD_REQUEST),
+    NOT_PERMISSION("ERR_ACC_0010", "No permission to access: %s", HttpStatus.NOT_ACCEPTABLE),
+
     OLD_PASSWORD_MISMATCH("ERR_OPM_0001", "Old password mismatch for user: %s", HttpStatus.BAD_REQUEST);
     private String code;
 
