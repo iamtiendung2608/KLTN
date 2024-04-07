@@ -4,7 +4,6 @@ import com.block_chain.KLTN.common.ApiConstant;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.security.*;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
@@ -34,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             new AntPathRequestMatcher("/swagger-resources/**"),
             new AntPathRequestMatcher("/favicon.ico"),
             new AntPathRequestMatcher("/actuator/**"),
-            new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.LOGIN),
+            new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.SIGNIN),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.CONFIRM_SIGNUP),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.VERIFY_USER),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.SIGNUP),

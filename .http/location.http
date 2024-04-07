@@ -1,0 +1,35 @@
+# curl 'https://api.viettelpost.vn/api/setting/listBuuCucVTPNew'
+#  -H 'Accept: */*'
+#  -H 'Accept-Language: en,vi-VN;q=0.9,vi;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5'
+#  -H 'Cache-Control: no-cache'
+#  -H 'Connection: keep-alive'
+#  -H 'Origin: https://viettelpost.vn'
+#  -H 'Pragma: no-cache'
+#  -H 'Referer: https://viettelpost.vn/'
+#  -H 'Sec-Fetch-Dest: empty'
+#  -H 'Sec-Fetch-Mode: cors'
+#  -H 'Sec-Fetch-Site: same-site'
+#  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+#  -H 'sec-ch-ua: "Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"'
+#  -H 'sec-ch-ua-mobile: ?0'
+#  -H 'sec-ch-ua-platform: "macOS"'
+#  -H 'traceparent: 00-cb237c40053cb388b6f6eab87a24213e-338747c8aa8c6214-01'
+GET https://api.viettelpost.vn/api/setting/listBuuCucVTPNew
+Accept: */*
+Accept-Language: en,vi-VN;q=0.9,vi;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5
+Cache-Control: no-cache
+Connection: keep-alive
+Origin: https://viettelpost.vn
+Pragma: no-cache
+Referer: https://viettelpost.vn/
+Sec-Fetch-Dest: empty
+Sec-Fetch-Mode: cors
+Sec-Fetch-Site: same-site
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36
+sec-ch-ua: "Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "macOS"
+traceparent: 00-cb237c40053cb388b6f6eab87a24213e-338747c8aa8c6214-01
+
+###
+

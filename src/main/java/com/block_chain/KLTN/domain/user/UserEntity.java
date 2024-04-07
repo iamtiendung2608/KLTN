@@ -1,5 +1,6 @@
 package com.block_chain.KLTN.domain.user;
 
+import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import lombok.*;
 
@@ -24,6 +25,14 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    @Column(name = "organization_id")
+    private Long organizationId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private OrganizationEntity organization;
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

@@ -61,4 +61,77 @@
                              referencedTableName="users"
                              referencedColumnNames="id"/>
   </changeSet>
+
+  <changeSet id="1.0.4" author="dung.pham">
+    <createTable tableName="organization">
+      <column name="id" type="serial"/>
+      <column name="name" type="varchar(64)"/>
+      <column name="description" type="text"/>
+      <column name="scale" type="varchar(16)"/>
+      <column name="category" type="varchar(16)"/>
+      <column name="scope" type="varchar(16)"/>
+    </createTable>
+
+    <addColumn tableName="users">
+      <column name="organization_id" type="int"/>
+    </addColumn>
+
+
+    <addPrimaryKey tableName="organization" columnNames="id"/>
+    <addForeignKeyConstraint baseTableName="users" baseColumnNames="organization_id"
+                             constraintName="users_organization_id_fk"
+                             referencedTableName="organization"
+                             referencedColumnNames="id"/>
+
+    <createTable tableName="location_tag">
+      <column name="id" type="serial"/>
+      <column name="province" type="varchar(128)"/>
+      <column name="district" type="varchar(128)"/>
+      <column name="ward" type="varchar(128)"/>
+      <column name="phone" type="varchar(16)"/>
+    </createTable>
+
+    <createTable tableName="post_offices">
+      <column name="id" type="serial"/>
+      <column name="name" type="varchar(64)"/>
+      <column name="phone" type="varchar(16)"/>
+      <column name="address" type="varchar(128)"/>
+      <column name="longitude" type="varchar(32)"/>
+      <column name="latitude" type="varchar(32)"/>
+      <column name="sponsor" type="varchar(64)"/>
+      <column name="code" type="varchar(16)"/>
+      <column name="sponsor_phone" type="varchar(16)"/>
+      <column name="location_tag_id" type="int"/>
+    </createTable>
+
+    <addPrimaryKey tableName="location_tag" columnNames="id"/>
+    <addPrimaryKey tableName="post_offices" columnNames="id"/>
+    <addForeignKeyConstraint baseTableName="post_offices" baseColumnNames="location_tag_id" constraintName="post_offices_location_tag_id_fk" referencedTableName="post_offices"
+                         referencedColumnNames="id"/>
+
+    <createTable tableName="customer">
+      <column name="id" type="serial"/>
+      <column name="full_name" type="varchar(64)"/>
+      <column name="email" type="varchar(64)"/>
+      <column name="phone" type="varchar(16)"/>
+      <column name="address" type="varchar(128)"/>
+      <column name="organization_id" type="int"/>
+      <column name="is_deleted" type="boolean" defaultValue="false"/>
+      <column name="location_tag_id" type="int"/>
+    </createTable>
+
+    <addPrimaryKey tableName="customer" columnNames="id"/>
+    <addForeignKeyConstraint baseTableName="customer" baseColumnNames="organization_id"
+                             constraintName="customer_organization_id_fk"
+                             referencedTableName="organization"
+                             referencedColumnNames="id"/>
+    <addForeignKeyConstraint baseTableName="customer" baseColumnNames="location_tag_id"
+                             constraintName="customer_location_tag_id_fk"
+                             referencedTableName="location_tag"
+                             referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="1.0.5" author="dung.pham">
+    <dropColumn tableName="location_tag" columnName="phone"/>
+  </changeSet>
 </databaseChangeLog>

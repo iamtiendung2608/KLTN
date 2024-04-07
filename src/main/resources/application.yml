@@ -16,6 +16,8 @@ spring:
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+  jpa:
+    show-sql: true
 
 springdoc:
   swagger-ui:
@@ -29,3 +31,12 @@ app:
     tokenExpirationMsec: 864000000
 verification:
   waiting: 90
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql: TRACE
