@@ -1,21 +1,30 @@
 spring:
+  config:
+    import: config.yml
   datasource:
-    url: jdbc:postgresql://localhost:15432/blockchain
-    username: blockchain
-    password: blockchain
+    url: jdbc:postgresql://${my_config.host}:${my_config.port}/${my_config.schema}
+    username: ${my_config.username}
+    password: ${my_config.password}
     driver-class-name: org.postgresql.Driver
+  # datasource:
+  #   url: jdbc:postgresql://localhost:15432/blockchain
+  #   username: blockchain
+  #   password: blockchain
+  #   driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: db/changelog/db.changelog-master.xml
     database-change-log-lock-table: database_changelog_lock
     database-change-log-table: database_changelog
   mail:
     host: smtp.gmail.com
-    username: ptdung2608@gmail.com
-    password: nlspvsnrakpuugxf
+    # username: ptdung2608@gmail.com
+    # password: nlspvsnrakpuugxf
+    username: ${my_config.mail.username}
+    password: ${my_config.mail.password}
     port: 587
     properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true
+      "[mail.smtp.auth]": true
+      "[mail.smtp.starttls.enable]": true
   jpa:
     show-sql: true
 
@@ -24,7 +33,8 @@ springdoc:
     enabled: true
 
 app:
-  mail-from: ptdung2608@gmail.com
+  # mail-from: ptdung2608@gmail.com
+  mail-from: ${my_config.mail.username}
   email-prefix: Shipment-system
   auth:
     tokenSecret: tiger_crystal
