@@ -134,4 +134,29 @@
   <changeSet id="1.0.5" author="dung.pham">
     <dropColumn tableName="location_tag" columnName="phone"/>
   </changeSet>
+
+  <changeSet id="1.0.6" author="dung.pham">
+    <dropColumn tableName="post_offices" columnName="location_tag_id"/>
+    <addColumn tableName="post_offices">
+      <column name="location_tag_id" type="int"/>
+    </addColumn>
+    <addForeignKeyConstraint baseTableName="post_offices" baseColumnNames="location_tag_id" constraintName="post_offices_location_tag_id_fk" referencedTableName="location_tag"
+                             referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="1.0.7" author="dung.pham">
+    <addColumn tableName="post_offices">
+      <column name="deleted" type="boolean" defaultValue="false"/>
+    </addColumn>
+  </changeSet>
+  <changeSet id="1.0.8" author="dung.pham">
+    <createTable tableName="wallet">
+      <column name="address" type="text"/>
+      <column name="secret" type="text"/>
+      <column name="salt_iv" type="text"/>
+      <column name="code" type="varchar(64)"/>
+      <column name="type" type="varchar(16)"/>
+    </createTable>
+    <addPrimaryKey tableName="wallet" columnNames="address"/>
+  </changeSet>
 </databaseChangeLog>

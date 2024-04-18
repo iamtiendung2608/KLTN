@@ -34,4 +34,6 @@ public class PostOfficesEntity {
     @ManyToOne
     @JoinColumn(name = "location_tag_id", referencedColumnName = "id", insertable = false, updatable = false)
     private LocationTagEntity locationTag;
+
+    private boolean deleted;
 }

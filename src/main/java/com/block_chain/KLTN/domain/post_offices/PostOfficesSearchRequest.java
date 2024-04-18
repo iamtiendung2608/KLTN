@@ -1,0 +1,14 @@
+package com.block_chain.KLTN.domain.post_offices;
+
+import com.block_chain.KLTN.common.OptionalBooleanBuilder;
+import com.querydsl.core.types.Predicate;
+
+public record PostOfficesSearchRequest(
+        String keyword
+) {
+    public Predicate toPredicate() {
+        QPostOfficesEntity qPostOfficesEntity = QPostOfficesEntity.postOfficesEntity;
+        return new OptionalBooleanBuilder(qPostOfficesEntity.deleted.eq(false))
+                .notNullAnd(qPostOfficesEntity.name::containsIgnoreCase, keyword).build();
+    }
+}
