@@ -1,11 +1,14 @@
 package com.block_chain.KLTN.event;
 
+import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
+import com.block_chain.KLTN.domain.wallet.WalletService;
 import com.block_chain.KLTN.helper.EmailSenderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.mail.MessagingException;
 
@@ -14,6 +17,7 @@ import javax.mail.MessagingException;
 @Slf4j
 public class CustomSpringEventListener {
     private final EmailSenderService emailSenderService;
+    private final WalletService walletService;
 
     @Async
     @EventListener(classes = CustomSpringEvent.class)
@@ -24,6 +28,13 @@ public class CustomSpringEventListener {
         } catch (MessagingException e) {
             log.error("Send mail failed", e);
         }
+    }
+
+    @Async
+    @TransactionalEventListener
+    public void handleTransactionProcessedEvent(CreateWalletEvent event) {
+        log.debug("Received create wallet event: " + event);
+        walletService.createWallet(event);
     }
 
 }

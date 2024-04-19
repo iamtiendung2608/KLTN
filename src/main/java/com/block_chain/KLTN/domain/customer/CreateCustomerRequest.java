@@ -6,6 +6,7 @@ public record CreateCustomerRequest(
     @NotNull String fullName,
     @NotNull String email,
     @NotNull String phone,
-    String address
+    String address,
+    @NotNull Long locationTagId
 ) {
 }

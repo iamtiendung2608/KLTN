@@ -1,6 +1,5 @@
-package com.block_chain.KLTN.domain.organization;
+package com.block_chain.KLTN.domain.customer;
 
-import com.block_chain.KLTN.domain.customer.*;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;

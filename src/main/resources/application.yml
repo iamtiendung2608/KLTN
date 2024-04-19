@@ -18,6 +18,11 @@ spring:
       mail.smtp.starttls.enable: true
   jpa:
     show-sql: true
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASS:guest}
 
 springdoc:
   swagger-ui:
@@ -31,6 +36,9 @@ app:
     tokenExpirationMsec: 864000000
 verification:
   waiting: 90
+
+rabbitmq:
+  create-wallet-queue: ${CREATE_WALLET_QUEUE:"create-wallet-queue"}
 
 logging:
   level:

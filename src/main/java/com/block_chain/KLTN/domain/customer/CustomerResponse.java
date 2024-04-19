@@ -1,5 +1,7 @@
 package com.block_chain.KLTN.domain.customer;
 
+import com.block_chain.KLTN.domain.location_tag.LocationTagResponse;
+
 public record CustomerResponse(
     Long id,
     String fullName,
@@ -8,11 +10,4 @@ public record CustomerResponse(
     String address,
     LocationTagResponse location
 ) {
-    public record LocationTagResponse(
-        Long id,
-        String province,
-        String district,
-        String ward
-    ) {
-    }
 }

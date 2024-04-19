@@ -9,3 +9,25 @@ services:
       - POSTGRES_DB=blockchain
     ports:
       - "15432:5432"
+  rabbitmq:
+    hostname: rabbitmq
+    container_name: "rabbitmq"
+    image: heidiks/rabbitmq-delayed-message-exchange:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+  cassandradb:
+    image: cassandra:3.11 # Use the official Cassandra image from Docker Hub
+    container_name: cassandra-container
+    ports:
+      - "9042:9042" # Expose Cassandra's default port
+    volumes:
+      - ./cassandra_data:/var/lib/cassandra # Persist Cassandra data outside the container
+    environment:
+      - MAX_HEAP_SIZE=512M # Optional: set Cassandra heap size
+      - HEAP_NEWSIZE=100M  # Optional: set Cassandra new generation heap size
