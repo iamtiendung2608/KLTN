@@ -1,7 +1,7 @@
 package com.block_chain.KLTN.domain.transfer_object;
 
+import com.block_chain.KLTN.domain.customer.CustomerEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
-import com.block_chain.KLTN.domain.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,15 +26,15 @@ public class TransferObjectEntity {
     @Enumerated(EnumType.STRING)
     private ReceiveShift receiveShift;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserEntity user;
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private CustomerEntity customer;
 
     @Column(name = "post_office_id")
-    private Integer postOfficeId;
+    private Long postOfficeId;
 
     @ManyToOne
     @JoinColumn(name = "post_office_id", referencedColumnName = "id", insertable = false, updatable = false)
