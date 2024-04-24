@@ -8,7 +8,7 @@ public record EmployeeRequest (
         @NotBlank String phone,
         @NotBlank String address,
         @NotBlank String email,
-        @NotNull Long locationTagId,
-        @NotBlank Long postOfficeId
+        @NotNull Long locationTagId
+        // @NotBlank Long postOfficeId
 ) {
 }

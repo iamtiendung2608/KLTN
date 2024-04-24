@@ -149,6 +149,7 @@
       <column name="deleted" type="boolean" defaultValue="false"/>
     </addColumn>
   </changeSet>
+
   <changeSet id="1.0.8" author="dung.pham">
     <createTable tableName="wallet">
       <column name="address" type="text"/>
@@ -158,5 +159,21 @@
       <column name="type" type="varchar(16)"/>
     </createTable>
     <addPrimaryKey tableName="wallet" columnNames="address"/>
+  </changeSet>
+
+  <changeSet id="1.0.8" author="toan.nguyen">
+    <createTable tableName="employee">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />  
+      </column>
+      <column name="name" type="varchar(128)"/>
+      <column name="phone" type="varchar(16)"/>
+      <column name="address" type="varchar(256)"/>
+      <column name="email" type="varchar(64)"/>
+      <column name="active" type="boolean" defaultValue="false"/>
+      <column name="location_tag_id" type="int">
+        <constraints referencedTableName="location_tag" referencedColumnNames="id" foreignKeyName="employee_location_tag_fk"/>
+      </column>
+    </createTable>
   </changeSet>
 </databaseChangeLog>

@@ -15,7 +15,7 @@ public interface EmployeeMapper {
     @Mapping(target = "phone", source = "employee.phone")
     @Mapping(target = "address", source = "employee.address")
     @Mapping(target = "locationTag", source = "locationTag")
-    EmployeeDetailResponse toDetailResponse(EmployeeEntity employee, LocationTagEntity locationTag, PostOfficesEntity postOffices);
+    EmployeeDetailResponse toDetailResponse(EmployeeEntity employee, LocationTagEntity locationTag);//, PostOfficesEntity postOffices);
 
     EmployeeResponse toResponse(EmployeeEntity employee);
 }

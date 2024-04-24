@@ -30,10 +30,10 @@ public class DefaultEmployeeQueryService implements EmployeeQueryService {
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         LocationTagEntity locationTag = locationTagRepository.findById(existEmployee.getLocationTagId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
-        PostOfficesEntity postOffice = postOfficesRepository.findById(existEmployee.getPostOfficeId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+        // PostOfficesEntity postOffice = postOfficesRepository.findById(existEmployee.getPostOfficeId())
+        //         .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
 
-        return employeeMapper.toDetailResponse(existEmployee, locationTag, postOffice);
+        return employeeMapper.toDetailResponse(existEmployee, locationTag);//, postOffice);
     }
 
     @Override

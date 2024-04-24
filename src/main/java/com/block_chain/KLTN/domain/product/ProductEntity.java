@@ -23,6 +23,8 @@ public class ProductEntity extends AbstractEntity {
     private Integer length;
     private Integer height;
     private Integer width;
+
+    @Column(name = "organization_id")
     private Integer organizationId;
 
     @ManyToOne(fetch = FetchType.LAZY)

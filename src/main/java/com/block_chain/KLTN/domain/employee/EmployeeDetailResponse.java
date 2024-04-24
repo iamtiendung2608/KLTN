@@ -13,7 +13,7 @@ public record EmployeeDetailResponse(
         String email,
         Boolean active,
         OffsetDateTime createdAt,
-        LocationTagResponse locationTag,
-        PostOfficesResponse postOffices
+        LocationTagResponse locationTag
+        // PostOfficesResponse postOffices
 ) {
 }
