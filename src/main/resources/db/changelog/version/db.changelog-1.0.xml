@@ -176,4 +176,48 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="1.0.9" author="toan.nguyen">
+    <createTable tableName="order">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="status" type="varchar(50)"/>
+      <column name="total_weight" type="int"/>
+      <column name="total_price" type="int"/>
+      <column name="note" type="varchar(256)"/>
+      <column name="delivery_at" type="timestamp"/>
+      <column name="estimated_delivery_at" type="timestamp"/>
+      <column name="delivery_type" type="varchar(50)"/>
+      <column name="paid_type" type="varchar(50)"/>
+
+      <column name="organization_id" type="int">
+        <constraints referencedTableName="organization" referencedColumnNames="id" foreignKeyName="order_organization_fk"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="item">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="name" type="varchar(128)"/>
+      <column name="price" type="int"/>
+      <column name="weight" type="real"/>
+      <column name="length" type="real"/>
+      <column name="height" type="real"/>
+      <column name="width" type="real"/>
+    </createTable>
+
+    <createTable tableName="order_item">
+      <column name="order_id" type="int">
+        <constraints referencedTableName="order" referencedColumnNames="id" foreignKeyName="orderItem_order_fk"/>
+      </column>
+
+      <column name="item_id" type="int">
+        <constraints referencedTableName="item" referencedColumnNames="id" foreignKeyName="orderItem_item_fk"/>
+      </column>
+
+      <column name="quantity" type="int"/>
+    </createTable>
+  </changeSet>
 </databaseChangeLog>

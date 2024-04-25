@@ -1,11 +1,13 @@
 package com.block_chain.KLTN.domain.order;
 
 import com.block_chain.KLTN.common.AbstractEntity;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "order")
@@ -23,12 +25,15 @@ public class OrderEntity extends AbstractEntity {
     private OrderStatus status;
 
     @Column(name = "total_weight")
-    private Integer totalWeight;
+    private float totalWeight;
 
     @Column(name = "total_price")
-    private Integer totalPrice;
+    private float totalPrice;
 
+    @Column(name = "delivery_at")
     private OffsetDateTime deliveryAt;
+
+    @Column(name = "estimated_delivery_at")
     private OffsetDateTime estimatedDeliveryAt;
 
     @Column(name = "delivery_type")
@@ -47,5 +52,8 @@ public class OrderEntity extends AbstractEntity {
 
     @Column(name = "organization_id")
     private Long organizationId;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItemEntity> orderItems;
 
 }
