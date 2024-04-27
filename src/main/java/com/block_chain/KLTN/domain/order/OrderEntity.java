@@ -6,11 +6,14 @@ import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import lombok.*;
 
 import javax.persistence.*;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Getter
 @Setter
 @Builder
@@ -53,7 +56,7 @@ public class OrderEntity extends AbstractEntity {
     @Column(name = "organization_id")
     private Long organizationId;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemEntity> orderItems;
 
 }

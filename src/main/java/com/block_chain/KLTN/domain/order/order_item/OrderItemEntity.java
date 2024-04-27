@@ -17,12 +17,12 @@ public class OrderItemEntity {
     private OrderItemKey id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("orderId")
+    @MapsId("order_id")
     @JoinColumn(name="order_id")
     private OrderEntity order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("itemId")
+    @MapsId("item_id")
     @JoinColumn(name="item_id")
     private ItemEntity item;
 

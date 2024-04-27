@@ -63,7 +63,6 @@ public class DefaultEmployeeService implements EmployeeService {
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
         // PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
         //         .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
-
         employeeMapper.updateEmployee(existEmployee, request);
         existEmployee.setLocationTagId(locationTag.getId());
         // existEmployee.setPostOfficeId(postOffice.getId());

@@ -11,7 +11,11 @@ import com.block_chain.KLTN.domain.item.ItemEntity;
 import com.block_chain.KLTN.domain.item.ItemMapper;
 import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemKey;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemMapper;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,47 +25,58 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultOrderService implements OrderService{
     private final OrderRepository orderRepository;
+    private final ItemRepository itemRepository;
+    private final OrderItemRepository orderItemRepository;
+
     private final OrderMapper orderMapper;
     private final ItemMapper itemMapper;
-    private final ItemRepository itemRepository;
+    private final OrderItemMapper orderItemMapper;
 
     @Override
     @Transactional
-    public OrderResponse createOrder(OrderCreateRequest order) {
-        List<ItemEntity> items = itemMapper.toListEntity(order.items());
-        List<OrderItemEntity> orderItems = new ArrayList<>();
-
-        float totalPrice = 0; 
-        float totalWeight = 0;
+    public OrderResponse createOrder(OrderCreateRequest orderReq) {
+        // Handling Order Entity
+        int totalPrice = orderReq.items()
+            .stream().reduce(0, (subTotal, item) -> subTotal + item.price() * item.quantity(), Integer::sum); 
+        float totalWeight = orderReq.items()
+            .stream().reduce(0f, (subTotal, item) -> subTotal + item.weight() * item.quantity(), Float::sum);
         OffsetDateTime estimatedDeliveryAt = OffsetDateTime.now().plusDays(7L);
         
         OrderEntity orderEntity = OrderEntity.builder()
-        .status(order.status())
-        .estimatedDeliveryAt(estimatedDeliveryAt)
-        .deliveryType(order.deliveryType())
-        .note(order.note())
-        .paidType(order.paidType())
-        .build();
+            .status(orderReq.status())
+            .totalPrice(totalPrice)
+            .totalWeight(totalWeight)
+            .estimatedDeliveryAt(estimatedDeliveryAt)
+            .deliveryType(orderReq.deliveryType())
+            .note(orderReq.note())
+            .paidType(orderReq.paidType())
+            .build();   
 
-        for (OrderItemRequest item : order.items()) {
-            totalPrice += item.price() * item.quantity();
-            totalWeight += item.weight() * item.quantity();
+        orderEntity = orderRepository.saveAndFlush(orderEntity);
+        
+        // Handling OrderItem Entity
+        List<OrderItemEntity> orderItems = new ArrayList<>();
+        for (OrderItemRequest item : orderReq.items()) {
+            ItemEntity itemEntity = itemRepository.saveAndFlush(itemMapper.toEntity(item));
+
             OrderItemEntity orderItem = OrderItemEntity.builder()
+                .id(new OrderItemKey(orderEntity.getId(), itemEntity.getId()))
                 .order(orderEntity)
-                .item(itemMapper.toEntity(item))
+                .item(itemEntity)
                 .quantity(item.quantity())
                 .build();
+
             orderItems.add(orderItem);
         }
-
-        orderEntity.setTotalPrice(totalPrice);
-        orderEntity.setTotalWeight(totalWeight);
         orderEntity.setOrderItems(orderItems);
-
-        orderRepository.save(orderEntity);
-        itemRepository.saveAllAndFlush(items);
+        orderItemRepository.saveAllAndFlush(orderItems);
 
         return orderMapper.toResponse(orderEntity);
     }
-    
+
+    @Override
+    public OrderResponse updateOrderStatus(OrderUpdateStatusRequest orderReq) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateOrderStatus'");
+    }
 }

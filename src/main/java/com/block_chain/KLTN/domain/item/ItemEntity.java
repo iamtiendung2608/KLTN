@@ -1,6 +1,10 @@
 package com.block_chain.KLTN.domain.item;
 
+import java.util.List;
+
 import javax.persistence.*;
+
+import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 
 import lombok.*;
 
@@ -23,5 +27,8 @@ public class ItemEntity {
     @Enumerated(EnumType.STRING)
     @Column(name="item_category")
     private ItemCategory itemCategory; //nullable
+
+    @OneToMany(mappedBy = "item")
+    private List<OrderItemEntity> orderItems;
 }
 

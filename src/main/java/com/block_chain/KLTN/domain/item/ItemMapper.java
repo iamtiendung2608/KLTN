@@ -8,7 +8,7 @@ import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
 
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
-    ItemResponse toResponse(ItemEntity itemEntity);
+    ItemResponse toResponse(ItemEntity item);
     ItemEntity toEntity(OrderItemRequest itemRequest);
     List<ItemEntity> toListEntity(List<OrderItemRequest> itemsRequests);
 }

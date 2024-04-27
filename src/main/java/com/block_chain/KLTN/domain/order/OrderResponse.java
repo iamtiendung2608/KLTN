@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.block_chain.KLTN.domain.item.ItemEntity;
-import com.block_chain.KLTN.domain.item.ItemResponse;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemResponse;
 
 public record OrderResponse(
     Long id,
@@ -18,7 +18,7 @@ public record OrderResponse(
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,
     Long organizationId,
-    List<ItemResponse> items
+    List<OrderItemResponse> items
 ) {
     
 }

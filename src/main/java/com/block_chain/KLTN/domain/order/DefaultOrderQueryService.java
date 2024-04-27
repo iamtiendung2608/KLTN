@@ -1,7 +1,5 @@
 package com.block_chain.KLTN.domain.order;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class DefaultOrderQueryService implements OrderQueryService{
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
-    
+
     @Override
     public OrderResponse getOrder(Long id) {
         OrderEntity entity = orderRepository.findById(id)

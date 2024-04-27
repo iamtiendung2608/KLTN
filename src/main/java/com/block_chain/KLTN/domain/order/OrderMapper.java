@@ -5,5 +5,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
+    @Mapping(source = "orderItems", target = "items")
     OrderResponse toResponse(OrderEntity order);
 }

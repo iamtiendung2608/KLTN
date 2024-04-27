@@ -1,24 +1,28 @@
 package com.block_chain.KLTN.common;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
+
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
-@Getter
-@Setter
-@EntityListeners(AuditingEntityListener.class)
+@Data
+@AllArgsConstructor @NoArgsConstructor
 public abstract class AbstractEntity {
-    @CreatedDate
+    // @CreatedDate
+    @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
-    @LastModifiedDate
+    // @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "modified_at", nullable = false)
-    private OffsetDateTime updatedAt;
+    private OffsetDateTime updatedAt = OffsetDateTime.now();
 }
