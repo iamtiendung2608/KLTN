@@ -3,13 +3,15 @@ package com.block_chain.KLTN.domain.order;
 import java.util.List;
 
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public record OrderCreateRequest(
-    List<OrderItemRequest> items,
-    DeliveryType deliveryType,
+    @NotEmpty List<OrderItemRequest> items,
+    @NotNull DeliveryType deliveryType,
     String note,
-    PaidType paidType,
-    OrderStatus status
+    @NotNull PaidType paidType,
+    @NotNull OrderStatus status
 ) {
     
 }

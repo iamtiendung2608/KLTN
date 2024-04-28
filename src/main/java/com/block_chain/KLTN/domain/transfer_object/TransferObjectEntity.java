@@ -38,5 +38,5 @@ public class TransferObjectEntity {
 
     @ManyToOne
     @JoinColumn(name = "post_office_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private PostOfficesEntity postOffices;
+    private PostOfficesEntity postOffices; //nullable
 }

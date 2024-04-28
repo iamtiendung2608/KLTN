@@ -7,7 +7,8 @@ import com.querydsl.core.types.Predicate;
 
 public record OrderSearchRequest(
     String keyword, //status, paid_type
-    Long customer_id
+    Long customer_id,
+
     // Todo: search order by post office and search in range of date
     // OffsetDateTime date_start
     // OffsetDateTime date_end
