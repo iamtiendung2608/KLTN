@@ -25,7 +25,7 @@ public class DefaultWalletService implements WalletService{
         WalletEntity entity = WalletEntity
                 .builder()
                 .code(event.code())
-                .type(WalletType.USER)
+                .type(event.type())
                 .build();
         initWalletEntity(entity);
         walletRepository.save(entity);

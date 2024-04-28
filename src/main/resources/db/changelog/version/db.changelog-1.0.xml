@@ -149,6 +149,7 @@
       <column name="deleted" type="boolean" defaultValue="false"/>
     </addColumn>
   </changeSet>
+
   <changeSet id="1.0.8" author="dung.pham">
     <createTable tableName="wallet">
       <column name="address" type="text"/>
@@ -158,5 +159,86 @@
       <column name="type" type="varchar(16)"/>
     </createTable>
     <addPrimaryKey tableName="wallet" columnNames="address"/>
+  </changeSet>
+
+  <changeSet id="1.0.8" author="toan.nguyen">
+    <createTable tableName="employee">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />  
+      </column>
+      <column name="name" type="varchar(128)"/>
+      <column name="phone" type="varchar(16)"/>
+      <column name="address" type="varchar(256)"/>
+      <column name="email" type="varchar(64)"/>
+      <column name="active" type="boolean" defaultValue="false"/>
+      <column name="location_tag_id" type="int">
+        <constraints referencedTableName="location_tag" referencedColumnNames="id" foreignKeyName="employee_location_tag_fk"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1.0.9" author="toan.nguyen">
+    <createTable tableName="order">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="status" type="varchar(50)"/>
+      <column name="total_weight" type="int"/>
+      <column name="total_price" type="int"/>
+      <column name="note" type="varchar(256)"/>
+      <column name="delivery_at" type="timestamp"/>
+      <column name="estimated_delivery_at" type="timestamp"/>
+      <column name="delivery_type" type="varchar(50)"/>
+      <column name="paid_type" type="varchar(50)"/>
+
+      <column name="organization_id" type="int">
+        <constraints referencedTableName="organization" referencedColumnNames="id" foreignKeyName="order_organization_fk"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="item">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="name" type="varchar(128)"/>
+      <column name="price" type="int"/>
+      <column name="weight" type="real"/>
+      <column name="length" type="real"/>
+      <column name="height" type="real"/>
+      <column name="width" type="real"/>
+    </createTable>
+
+    <createTable tableName="order_item">
+      <column name="order_id" type="int">
+        <constraints referencedTableName="order" referencedColumnNames="id" foreignKeyName="orderItem_order_fk"/>
+      </column>
+
+      <column name="item_id" type="int">
+        <constraints referencedTableName="item" referencedColumnNames="id" foreignKeyName="orderItem_item_fk"/>
+      </column>
+
+      <column name="quantity" type="int"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1.0.10" author="toan.nguyen">
+    <addColumn tableName="item">
+      <column name="item_category" type="varchar(20)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="1.0.11" author="toan.nguyen">
+    <renameTable oldTableName="order" newTableName="orders" />
+  </changeSet>
+
+  <changeSet id="1.0.12" author="toan.nguyen">
+    <addColumn tableName="orders">
+      <column name="create_at" type="timestamp"/>
+      <column name="modified_at" type="timestamp"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="1.0.13" author="toan.nguyen">
+    <renameColumn tableName="orders" oldColumnName="create_at" newColumnName="created_at" />
   </changeSet>
 </databaseChangeLog>

@@ -24,7 +24,11 @@ public class TransactionEntity extends AbstractEntity {
     private TransactionStatus status;
 
     private String note;
+
+    @Column(name = "order_id")
     private Long orderId;
+
+    @Column(name = "post_office_id")
     private Long PostOfficeId;
 
     @ManyToOne

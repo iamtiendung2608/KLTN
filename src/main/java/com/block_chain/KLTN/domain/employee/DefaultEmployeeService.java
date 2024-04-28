@@ -4,10 +4,14 @@ import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagRepository;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
+import com.block_chain.KLTN.domain.wallet.WalletType;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ public class DefaultEmployeeService implements EmployeeService {
     private final LocationTagRepository locationTagRepository;
     private final PostOfficesRepository postOfficesRepository;
     private final EmployeeMapper employeeMapper;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -28,8 +33,8 @@ public class DefaultEmployeeService implements EmployeeService {
         Optional<EmployeeEntity> existUser = employeeRepository.findByEmail(request.email());
         LocationTagEntity locationTag = locationTagRepository.findById(request.locationTagId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
-        PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+        // PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+        //         .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
 
         if (existUser.isPresent()) {
             throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "User");
@@ -42,9 +47,10 @@ public class DefaultEmployeeService implements EmployeeService {
                 .email(request.email())
                 .active(true)
                 .locationTagId(locationTag.getId())
-                .postOfficeId(postOffice.getId())
                 .build();
         employeeRepository.save(employee);
+        applicationEventPublisher.publishEvent(new CreateWalletEvent(Long.toString(employee.getId()), WalletType.EMPLOYEE));
+
         return new CreateEmployeeResponse(employee.getId());
     }
 
@@ -55,12 +61,11 @@ public class DefaultEmployeeService implements EmployeeService {
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         LocationTagEntity locationTag = locationTagRepository.findById(request.locationTagId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
-        PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
-
+        // PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+        //         .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
         employeeMapper.updateEmployee(existEmployee, request);
         existEmployee.setLocationTagId(locationTag.getId());
-        existEmployee.setPostOfficeId(postOffice.getId());
+        // existEmployee.setPostOfficeId(postOffice.getId());
         employeeRepository.save(existEmployee);
     }
 

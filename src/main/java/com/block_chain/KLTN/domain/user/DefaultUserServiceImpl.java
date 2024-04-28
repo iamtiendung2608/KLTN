@@ -43,7 +43,7 @@ public class DefaultUserServiceImpl implements UserService {
 
         RoleEntity role = roles.stream()
                 .filter(i -> AppConstant.Roles.USER.getRoleCode().equals(i.getRoleCode())).findFirst().get();
-
+        
         UserEntity user = UserEntity.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))

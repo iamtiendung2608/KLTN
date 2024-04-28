@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 cassandra_data
+postgres_data

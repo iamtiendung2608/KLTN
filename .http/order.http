@@ -1,0 +1,33 @@
+### create order
+POST {{host}}/order
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "name": "DELL Vostro 5010",
+      "price": 15000000,
+      "weight": 1.3,
+      "length": 51.2,
+      "height": 41.1,
+      "width": 30,
+      "itemCategory": "HIGH_VALUE",
+      "quantity": 1
+    },
+    {
+      "name": "Bộ dụng cụ vệ sinh laptop",
+      "price": 29990,
+      "weight": 0.3,
+      "length": 22,
+      "height": 7,
+      "width": 10.3,
+      "itemCategory": "FRAGILE",
+      "quantity": 2
+    }
+  ],
+  "deliveryType": "FAST",
+  "note": "Giao nhanh nhanh tí có việc",
+  "paidType": "SENDER",
+  "status": "DRAFT"
+}
