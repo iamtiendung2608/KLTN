@@ -6,4 +6,6 @@ public interface EmployeeService {
     void update(Long id, EmployeeRequest request);
 
     void updateStatus(Long id, UpdateEmployeeStatus request);
+
+    void updateLocation(Long id, UpdateEmployeeLocationRequest request);
 }

@@ -10,11 +10,12 @@ import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,8 +34,12 @@ public class DefaultEmployeeService implements EmployeeService {
         Optional<EmployeeEntity> existUser = employeeRepository.findByEmail(request.email());
         LocationTagEntity locationTag = locationTagRepository.findById(request.locationTagId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
-        // PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-        //         .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+        List<PostOfficesEntity> postOfficesEntityList = postOfficesRepository.findAllById(
+            request.postOfficeIds());
+
+        if (postOfficesEntityList.size() != request.postOfficeIds().size()) {
+            throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office");
+        }
 
         if (existUser.isPresent()) {
             throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "User");
@@ -46,10 +51,12 @@ public class DefaultEmployeeService implements EmployeeService {
                 .address(request.address())
                 .email(request.email())
                 .active(true)
+                .postOffices(new HashSet<>(postOfficesEntityList))
                 .locationTagId(locationTag.getId())
                 .build();
         employeeRepository.save(employee);
         applicationEventPublisher.publishEvent(new CreateWalletEvent(Long.toString(employee.getId()), WalletType.EMPLOYEE));
+        //TODO: create new user principal for each employee
 
         return new CreateEmployeeResponse(employee.getId());
     }
@@ -61,11 +68,17 @@ public class DefaultEmployeeService implements EmployeeService {
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         LocationTagEntity locationTag = locationTagRepository.findById(request.locationTagId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
-        // PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-        //         .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+        List<PostOfficesEntity> postOfficesEntityList = postOfficesRepository.findAllById(
+                request.postOfficeIds());
+
+        if (postOfficesEntityList.size() != request.postOfficeIds().size()) {
+            throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office");
+        }
+
         employeeMapper.updateEmployee(existEmployee, request);
         existEmployee.setLocationTagId(locationTag.getId());
-        // existEmployee.setPostOfficeId(postOffice.getId());
+        existEmployee.getPostOffices().addAll(new HashSet<>(postOfficesEntityList));
+        existEmployee.getPostOffices().removeIf(postOfficesEntity -> !request.postOfficeIds().contains(postOfficesEntity.getId()));
         employeeRepository.save(existEmployee);
     }
 
@@ -75,6 +88,22 @@ public class DefaultEmployeeService implements EmployeeService {
         EmployeeEntity existEmployee = employeeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         existEmployee.setActive(request.active());
+        employeeRepository.save(existEmployee);
+    }
+
+    @Override
+    @Transactional
+    public void updateLocation(Long id, UpdateEmployeeLocationRequest request) {
+        EmployeeEntity existEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
+        List<PostOfficesEntity> postOfficesEntityList = postOfficesRepository.findAllById(
+                request.postOfficeIds());
+
+        if (postOfficesEntityList.size() != request.postOfficeIds().size()) {
+            throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office");
+        }
+        existEmployee.getPostOffices().addAll(new HashSet<>(postOfficesEntityList));
+        existEmployee.getPostOffices().removeIf(postOfficesEntity -> !request.postOfficeIds().contains(postOfficesEntity.getId()));
         employeeRepository.save(existEmployee);
     }
 }

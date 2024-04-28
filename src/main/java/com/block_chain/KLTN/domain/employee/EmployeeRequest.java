@@ -1,5 +1,6 @@
 package com.block_chain.KLTN.domain.employee;
 
+import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +9,7 @@ public record EmployeeRequest (
         @NotBlank String phone,
         @NotBlank String address,
         @NotBlank String email,
-        @NotNull Long locationTagId
-        // @NotBlank Long postOfficeId
+        @NotNull Long locationTagId,
+        Set<Long> postOfficeIds
 ) {
 }

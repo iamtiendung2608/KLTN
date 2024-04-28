@@ -241,4 +241,48 @@
   <changeSet id="1.0.13" author="toan.nguyen">
     <renameColumn tableName="orders" oldColumnName="create_at" newColumnName="created_at" />
   </changeSet>
+  <changeSet id="1.0.13" author="dung.pham">
+    <createTable tableName="employee_post_offices">
+      <column name="employee_id" type="int"/>
+      <column name="post_office_id" type="int"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="employee_post_offices" baseColumnNames="employee_id" constraintName="employee_post_offices_employee_id_fk"
+                             referencedTableName="employee"
+                             referencedColumnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="employee_post_offices" baseColumnNames="post_office_id" constraintName="employee_post_offices_post_office_id_fk"
+                             referencedTableName="post_offices"
+                             referencedColumnNames="id"/>
+
+    <addPrimaryKey tableName="employee_post_offices" columnNames="employee_id, post_office_id"/>
+
+    <createTable tableName="transaction">
+      <column name="id" type="serial"/>
+      <column name="status" type="varchar(16)"/>
+      <column name="note" type="text"/>
+      <column name="post_office_id" type="int"/>
+      <column name="order_id" type="int"/>
+      <column name="employee_id" type="int"/>
+      <column name="created_at" type="timestamp"/>
+      <column name="modified_at" type="timestamp"/>
+    </createTable>
+
+    <addPrimaryKey tableName="transaction" columnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="employee_id"
+                             constraintName="transaction_employee_id_fk"
+                             referencedTableName="employee"
+                             referencedColumnNames="id"/>
+    
+    <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="post_office_id"
+                             constraintName="transaction_post_offices_id_fk"
+                             referencedTableName="post_offices"
+                             referencedColumnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="order_id"
+                             constraintName="transaction_order_id_fk"
+                             referencedTableName="orders"
+                             referencedColumnNames="id"/>
+  </changeSet>
 </databaseChangeLog>

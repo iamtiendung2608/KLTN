@@ -1,6 +1,7 @@
 package com.block_chain.KLTN.domain.transaction;
 
 import com.block_chain.KLTN.common.AbstractEntity;
+import com.block_chain.KLTN.domain.employee.EmployeeEntity;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import lombok.*;
@@ -29,7 +30,14 @@ public class TransactionEntity extends AbstractEntity {
     private Long orderId;
 
     @Column(name = "post_office_id")
-    private Long PostOfficeId;
+    private Long postOfficeId;
+
+    @Column(name = "employee_id")
+    private Long employeeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private EmployeeEntity employee;
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id", insertable = false, updatable = false)
@@ -37,5 +45,5 @@ public class TransactionEntity extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "post_office_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private PostOfficesEntity postOffices;
+    private PostOfficesEntity postOffice;
 }

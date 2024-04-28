@@ -43,4 +43,10 @@ public class EmployeeController {
     public Page<EmployeeResponse> getEmployees(EmployeeSearchRequest request, Pageable pageable) {
         return employeeQueryService.getEmployees(request, pageable);
     }
+
+    @PutMapping("/{id}/post-offices")
+    public ResponseEntity<Void> updateLocation(@PathVariable("id") Long id, @Valid @RequestBody UpdateEmployeeLocationRequest request) {
+        employeeService.updateLocation(id, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
