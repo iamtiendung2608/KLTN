@@ -1,10 +1,9 @@
 package com.block_chain.KLTN.domain.location_tag;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 public interface LocationTagQueryService {
-    Page<LocationTagResponse> getLocationTag(LocationTagSearchRequest request, Pageable pageable);
+    List<LocationTagResponse> getLocationTag(LocationTagSearchRequest request);
 
     LocationTagResponse getLocationTagById(Long id);
 }
