@@ -3,12 +3,10 @@ package com.block_chain.KLTN.domain.order;
 import com.block_chain.KLTN.common.AbstractEntity;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
+import com.block_chain.KLTN.domain.transfer_object.TransferObjectEntity;
 import lombok.*;
 
 import javax.persistence.*;
-
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -59,4 +57,17 @@ public class OrderEntity extends AbstractEntity {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemEntity> orderItems;
 
+    @Column(name = "sender_object_id")
+    private Long senderObjectId;
+
+    @Column(name = "receiver_object_id")
+    private Long receiverObjectId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_object_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private TransferObjectEntity senderObject;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_object_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private TransferObjectEntity receiverObject;
 }

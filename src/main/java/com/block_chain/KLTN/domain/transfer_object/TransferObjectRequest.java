@@ -6,6 +6,6 @@ public record TransferObjectRequest(
         @NotNull Boolean atOfficeFlg,
         @NotNull ReceiveShift receiveShift,
         @NotNull Long customerId,
-        @NotNull Long postOfficeId
+        Long postOfficeId
 ) {
 }

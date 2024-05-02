@@ -285,4 +285,35 @@
                              referencedTableName="orders"
                              referencedColumnNames="id"/>
   </changeSet>
+  <changeSet id="1.0.14" author="dung.pham">
+    <addColumn tableName="wallet">
+      <column name="user_id" type="int"/>
+    </addColumn>
+
+    <addForeignKeyConstraint baseTableName="wallet" baseColumnNames="user_id" constraintName="wallet_user_id_fk"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="1.0.15" author="dung.pham">
+    <createTable tableName="transfer_object">
+      <column name="id" type="serial"/>
+      <column name="at_office_flg" type="boolean" defaultValue="false"/>
+      <column name="recieve_shift" type="varchar(18)"/>
+      <column name="customer_id" type="int"/>
+      <column name="post_office_id" type="int"/>
+    </createTable>
+
+    <addPrimaryKey tableName="transfer_object" columnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transfer_object" baseColumnNames="customer_id"
+                             constraintName="transfer_object_customer_id_fk"
+                             referencedTableName="customer"
+                             referencedColumnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transfer_object" baseColumnNames="post_office_id"
+                             constraintName="transfer_object_post_office_id_fk"
+                             referencedTableName="post_offices"
+                             referencedColumnNames="id"/>
+  </changeSet>
 </databaseChangeLog>

@@ -3,6 +3,7 @@ package com.block_chain.KLTN.domain.wallet;
 import com.block_chain.KLTN.publiser.CreateWalletProducer;
 import com.block_chain.KLTN.util.AppUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -19,17 +20,17 @@ public class DefaultWalletService implements WalletService{
         this.createWalletProducer = createWalletProducer;
     }
 
-
     @Override
+    @Transactional
     public void createWallet(CreateWalletEvent event) {
         WalletEntity entity = WalletEntity
                 .builder()
                 .code(event.code())
                 .type(event.type())
+                .userId(event.userId())
                 .build();
         initWalletEntity(entity);
         walletRepository.save(entity);
-        //TODO send event to rabbitmq
         createWalletProducer.sendMessage(entity);
     }
 

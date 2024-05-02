@@ -43,7 +43,8 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(new CustomAuthentication(request.email(), request.password()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new AuthResponse(token));
+        String address = userService.getUserAddress(request.email());
+        return ResponseEntity.ok(new AuthResponse(token, address));
     }
 
     @PostMapping("/verify")

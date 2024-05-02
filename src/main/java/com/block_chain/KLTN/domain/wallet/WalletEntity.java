@@ -1,5 +1,6 @@
 package com.block_chain.KLTN.domain.wallet;
 
+import com.block_chain.KLTN.domain.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,4 +22,11 @@ public class WalletEntity {
     private String code;
     @Enumerated(EnumType.STRING)
     private WalletType type;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private UserEntity user;
 }

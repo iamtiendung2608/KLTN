@@ -10,4 +10,6 @@ public interface UserService {
     ResponseEntity<SignUpResponse> signUp(SignUpRequest request);
 
     ResponseEntity<?> changePassword(UserPrincipal user, ChangePasswordRequest request);
+
+    String getUserAddress(String email);
 }

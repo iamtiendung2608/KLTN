@@ -39,12 +39,3 @@ verification:
 
 rabbitmq:
   create-wallet-queue: ${CREATE_WALLET_QUEUE:"create-wallet-queue"}
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type:
-          descriptor:
-            sql: TRACE
