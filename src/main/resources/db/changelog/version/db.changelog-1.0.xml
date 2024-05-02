@@ -316,4 +316,7 @@
                              referencedTableName="post_offices"
                              referencedColumnNames="id"/>
   </changeSet>
+  <changeSet id="1.0.14" author="toan.nguyen">
+    <modifyDataType tableName="post_offices" columnName="address" newDataType="varchar(256)" />
+  </changeSet>
 </databaseChangeLog>
