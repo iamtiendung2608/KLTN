@@ -12,7 +12,6 @@ public record OrderCreateRequest(
     String note,
     @NotNull PaidType paidType,
     @NotNull OrderStatus status
-
 ) {
     
 }

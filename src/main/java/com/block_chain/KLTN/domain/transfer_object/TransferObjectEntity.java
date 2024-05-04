@@ -5,6 +5,7 @@ import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "transfer_object")
@@ -38,5 +39,8 @@ public class TransferObjectEntity {
 
     @ManyToOne
     @JoinColumn(name = "post_office_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private PostOfficesEntity postOffices; //nullable
+    private PostOfficesEntity postOffices;
+
+    @Column(name = "action_date")
+    private OffsetDateTime actionDate;
 }

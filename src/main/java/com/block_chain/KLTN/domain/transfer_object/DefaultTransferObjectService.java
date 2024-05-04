@@ -29,6 +29,7 @@ public class DefaultTransferObjectService implements TransferObjectService {
                 .receiveShift(request.receiveShift())
                 .customerId(customer.getId())
                 .postOfficeId(postOffice.getId())
+                .actionDate(request.actionDate())
                 .build();
         transferObjectRepository.save(entity);
         return new CreateTransferObjectResponse(entity.getId());
