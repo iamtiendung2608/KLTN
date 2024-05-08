@@ -316,4 +316,54 @@
                              referencedTableName="post_offices"
                              referencedColumnNames="id"/>
   </changeSet>
+
+  <changeSet id="1.0.16" author="toan.nguyen">
+    <dropForeignKeyConstraint baseTableName="wallet" constraintName="wallet_user_id_fk"/>
+  </changeSet>
+
+  <changeSet id="1.0.17" author="toan.nguyen">
+    <addColumn tableName="transfer_object">
+      <column name="action_date" type="timestamp"></column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet id="1.0.18" author="toan.nguyen">
+    <addColumn tableName="orders">
+      <column name="receiver_object_id" type="int">
+        <constraints referencedTableName="transfer_object" 
+          referencedColumnNames="id" 
+          foreignKeyName="order_receiver_transfer_obj_fk"/>
+      </column>
+      
+      <column name="sender_object_id" type="int">
+        <constraints referencedTableName="transfer_object" 
+          referencedColumnNames="id" 
+          foreignKeyName="order_sender_transfer_obj_fk"/>
+      </column>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="1.0.19" author="toan.nguyen">
+    <addColumn tableName="post_offices">
+      <column name="wallet_address" type="text">
+        <constraints referencedTableName="wallet" 
+        referencedColumnNames="address" 
+        foreignKeyName="post_offies_wallet_fk"/>
+      </column>
+    </addColumn>
+
+    <addColumn tableName="organization">
+      <column name="wallet_address" type="text">
+        <constraints referencedTableName="wallet" 
+        referencedColumnNames="address" 
+        foreignKeyName="org_wallet_fk"/>
+      </column>
+    </addColumn>
+
+    <dropColumn tableName="wallet" columnName="user_id"/>
+  </changeSet>
+  <changeSet id="1.0.20" author="toan.nguyen">
+    <renameColumn tableName="verification" oldColumnName="updated_at" newColumnName="modified_at"/>
+  </changeSet>
 </databaseChangeLog>

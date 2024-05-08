@@ -6,9 +6,12 @@ import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderRepository;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.transactionEvent.CreateTransactionEvent;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,30 +24,38 @@ public class DefaultTransactionService implements TransactionService {
     private final OrderRepository orderRepository;
     private final EmployeeRepository employeeRepository;
     private final TransactionRepository transactionRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final TransactionMapper transactionMapper;
 
     @Override
     @Transactional
     public CreateTransactionResponse createTransaction(CreateTransactionRequest request) {
-        PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
-        OrderEntity order = orderRepository.findById(request.orderId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
+        if (!orderRepository.existsById(request.orderId())){
+                throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order");
+        };
 
         TransactionEntity transaction = TransactionEntity.builder()
                 .status(request.status())
                 .note(request.note())
-                .postOfficeId(postOffice.getId())
-                .orderId(order.getId())
+                .orderId(request.orderId())
                 .build();
 
-        if (!Objects.isNull(request.employeeId())) {
-            EmployeeEntity employee = employeeRepository.findById(request.employeeId())
-                    .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
-            transaction.setEmployeeId(employee.getId());
-        }
-
         transactionRepository.save(transaction);
-        return new CreateTransactionResponse(transaction.getId());
 
+        applicationEventPublisher.publishEvent(new CreateTransactionEvent(null, transaction));
+        return new CreateTransactionResponse(transaction.getId());
+    }
+
+    @Override
+    @Transactional
+    public TransactionResponse updateTransactionStatus(UpdateTransactionRequest request) {
+        TransactionEntity transaction = transactionRepository.findById(request.id())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Transaction"));
+        
+        //To-do can not set staus deliveried if staus is sent 
+        transaction.setStatus(request.status());
+        transactionRepository.save(transaction);
+        return transactionMapper.toResponse(transaction);
     }
 }

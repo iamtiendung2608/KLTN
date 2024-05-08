@@ -1,0 +1,21 @@
+### create order
+POST {{host}}/transfer_object
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+# sender
+{
+  "atOfficeFlg": true,
+  "receiveShift": "MORNING",
+  "customerId": 1,
+  "postOfficeId": 1,
+  "actionDate": "2024-05-06T09:07:58.795Z"
+}
+
+# receiver
+{
+  "atOfficeFlg": false,
+  "receiveShift": "MORNING",
+  "customerId": 2,
+  "postOfficeId": 1
+}

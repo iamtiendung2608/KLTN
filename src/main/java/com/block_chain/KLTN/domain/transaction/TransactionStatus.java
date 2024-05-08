@@ -4,8 +4,11 @@ import lombok.Getter;
 
 @Getter
 public enum TransactionStatus {
-    WAITING,
-    SENT,
-    DELIVERY,
-    RECEIVED
+    CREATED,
+    RECEIVED,
+    TRANSPORTING,
+    TRANSPORTED,
+    DELIVERING,
+    DELIVERIED
+    // To-do: some status for exception
 }

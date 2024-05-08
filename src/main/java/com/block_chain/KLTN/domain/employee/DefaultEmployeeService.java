@@ -55,7 +55,6 @@ public class DefaultEmployeeService implements EmployeeService {
                 .locationTagId(locationTag.getId())
                 .build();
         employeeRepository.save(employee);
-        applicationEventPublisher.publishEvent(new CreateWalletEvent(Long.toString(employee.getId()), WalletType.EMPLOYEE, employee.getId()));
         //TODO: create new user principal for each employee
 
         return new CreateEmployeeResponse(employee.getId());

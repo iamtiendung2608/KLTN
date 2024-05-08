@@ -54,7 +54,7 @@ public class OrderEntity extends AbstractEntity {
     @Column(name = "organization_id")
     private Long organizationId;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderItemEntity> orderItems;
 
     @Column(name = "sender_object_id")

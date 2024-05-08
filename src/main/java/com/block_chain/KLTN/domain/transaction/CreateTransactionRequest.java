@@ -6,7 +6,7 @@ public record CreateTransactionRequest(
         @NotNull TransactionStatus status,
         String note,
         @NotNull Long orderId,
-        @NotNull Long postOfficeId,
+        Long postOfficeId,
         Long employeeId
 ) {
 }

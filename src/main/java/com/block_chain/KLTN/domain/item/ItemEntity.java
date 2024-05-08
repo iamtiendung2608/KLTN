@@ -18,11 +18,11 @@ public class ItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private int price;
-    private float weight;
-    private float length;
-    private float height;
-    private float width;
+    private Integer price;
+    private Float weight;
+    private Float length;
+    private Float height;
+    private Float width;
 
     @Enumerated(EnumType.STRING)
     @Column(name="item_category")

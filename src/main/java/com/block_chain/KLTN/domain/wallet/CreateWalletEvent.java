@@ -1,8 +1,7 @@
 package com.block_chain.KLTN.domain.wallet;
 
 public record CreateWalletEvent(
-        String code,
-        WalletType type,
-        Long userId
+        Long code,
+        WalletType type
 ) {
 }

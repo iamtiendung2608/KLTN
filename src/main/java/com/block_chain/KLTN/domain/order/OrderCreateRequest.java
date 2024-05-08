@@ -11,7 +11,9 @@ public record OrderCreateRequest(
     @NotNull DeliveryType deliveryType,
     String note,
     @NotNull PaidType paidType,
-    @NotNull OrderStatus status
+    @NotNull OrderStatus status,
+    @NotNull Long sender_object_id,
+    @NotNull Long receiver_object_id
 ) {
     
 }
