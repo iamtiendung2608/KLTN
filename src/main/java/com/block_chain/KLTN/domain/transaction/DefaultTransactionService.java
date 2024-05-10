@@ -4,11 +4,14 @@ import com.block_chain.KLTN.domain.employee.EmployeeEntity;
 import com.block_chain.KLTN.domain.employee.EmployeeRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderRepository;
+import com.block_chain.KLTN.domain.order.OrderStatus;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.transactionEvent.CreateTransactionEvent;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+
+import liquibase.pro.packaged.aP;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,22 +34,57 @@ public class DefaultTransactionService implements TransactionService {
     @Override
     @Transactional
     public CreateTransactionResponse createTransaction(CreateTransactionRequest request) {
-        if (!orderRepository.existsById(request.orderId())){
-                throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order");
-        };
+        TransactionEntity oldTransaction = transactionRepository.findLastTransaction(request.orderId());
+        
+        OrderEntity order = orderRepository.findById(request.orderId())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
 
         TransactionEntity transaction = TransactionEntity.builder()
-                .status(request.status())
-                .note(request.note())
-                .orderId(request.orderId())
-                .build();
+                    .status(request.status())
+                    .note(request.note())
+                    .orderId(request.orderId())
+                    .order(order)
+                    .employeeId(request.employeeId())
+                    .postOfficeId(request.postOfficeId())
+                    .build();
 
-        transactionRepository.save(transaction);
+        switch (transaction.getStatus()) {
+            case RECEIVED:
+            case TRANSPORTED:
+            case DELIVERING:
+            case DELIVERIED:
+            case TRANSPORTING:{
+                PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+                    .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
+                EmployeeEntity employeeEntity = employeeRepository.findById(request.employeeId())
+                    .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
 
-        applicationEventPublisher.publishEvent(new CreateTransactionEvent(null, transaction));
+                transaction.setPostOffice(postOffice);
+                transaction.setEmployee(employeeEntity);
+                applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
+                break;
+            }
+                
+            case CREATED:{
+                if (Objects.nonNull(oldTransaction)) {
+                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Đơn hàng đã được gửi đến kho hàng");
+                }
+                applicationEventPublisher.publishEvent(new CreateTransactionEvent(null, transaction));
+                break;
+            }
+            default:
+                throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Transaction Status");
+        }
+        
+        transaction = transactionRepository.save(transaction);
         return new CreateTransactionResponse(transaction.getId());
+        
     }
 
+
+    /*
+    * We dont need this
+    */
     @Override
     @Transactional
     public TransactionResponse updateTransactionStatus(UpdateTransactionRequest request) {

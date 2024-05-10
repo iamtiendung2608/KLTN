@@ -23,7 +23,6 @@ public class RabbitMqConfig {
         return rabbitTemplate;
     }
 
-
     @Value("${rabbitmq.create-wallet-queue}")
     private String createWalletQueue;
     @Bean

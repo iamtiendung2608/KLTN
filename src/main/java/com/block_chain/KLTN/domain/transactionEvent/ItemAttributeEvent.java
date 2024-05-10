@@ -1,7 +1,7 @@
 package com.block_chain.KLTN.domain.transactionEvent;
 
 public record ItemAttributeEvent(
-    Integer id,
+    Long id,
     String name,
     Integer quantity,
     Integer unitPrice,

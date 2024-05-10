@@ -17,5 +17,5 @@ Content-Type: application/json
   "atOfficeFlg": false,
   "receiveShift": "MORNING",
   "customerId": 2,
-  "postOfficeId": 1
+  "postOfficeId": 24
 }
