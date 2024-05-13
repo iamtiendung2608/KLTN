@@ -8,4 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostOfficesRepository extends JpaRepository<PostOfficesEntity, Long>,
         QueryDslRepository<PostOfficesEntity>, QuerydslPredicateExecutor<PostOfficesEntity> {
+
+    boolean existsByName(String name);
+    boolean existsByCode(String code);
 }

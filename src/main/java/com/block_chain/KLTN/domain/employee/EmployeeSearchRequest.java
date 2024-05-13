@@ -11,7 +11,7 @@ public record EmployeeSearchRequest(
 
     public Predicate toPredicate() {
         QEmployeeEntity qEmployee = QEmployeeEntity.employeeEntity;
-        return new OptionalBooleanBuilder(qEmployee.id.lt(1L)) //modify default condition later
+        return new OptionalBooleanBuilder(qEmployee.id.gt(0L)) //modify default condition later
                 .notNullAnd(qEmployee.locationTagId::eq, locationTagId)
                 // .notNullAnd(qEmployee.postOfficeId::eq, postOfficeId)
                 .notBlankAnd(qEmployee.name::containsIgnoreCase, keyword)
