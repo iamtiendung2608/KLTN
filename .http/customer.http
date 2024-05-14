@@ -1,0 +1,20 @@
+### create customer
+POST {{host}}/customer
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fullName": "Phạm Tiến Dũng",
+  "email": "dungpt@gmail.com",
+  "phone": "0123456789",
+  "address": "7 đường Lã Xuân Oai",
+  "locationTagId": 8813
+}
+
+{
+  "fullName": "Nguyễn Đức Toàn",
+  "email": "toannd@gmail.com",
+  "phone": "0375325687",
+  "address": "1/23 Đ.Linh Đông",
+  "locationTagId": 114
+}

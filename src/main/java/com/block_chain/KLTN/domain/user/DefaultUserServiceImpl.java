@@ -7,6 +7,7 @@ import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
 import com.block_chain.KLTN.domain.verification.VerifyService;
 import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
+import com.block_chain.KLTN.domain.wallet.WalletQueryService;
 import com.block_chain.KLTN.domain.wallet.WalletType;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
@@ -31,6 +32,7 @@ public class DefaultUserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final VerifyService verifyService;
+    private final WalletQueryService walletQueryService;
 
     @Transactional
     @Override
@@ -43,7 +45,7 @@ public class DefaultUserServiceImpl implements UserService {
 
         RoleEntity role = roles.stream()
                 .filter(i -> AppConstant.Roles.USER.getRoleCode().equals(i.getRoleCode())).findFirst().get();
-
+        
         UserEntity user = UserEntity.builder()
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
@@ -52,7 +54,7 @@ public class DefaultUserServiceImpl implements UserService {
         user.addRole(role);
         userRepository.save(user);
         verifyService.createVerify(user);
-        applicationEventPublisher.publishEvent(new CreateWalletEvent(Long.toString(user.getId()), WalletType.USER));
+        // applicationEventPublisher.publishEvent(new CreateWalletEvent(user.getId(), WalletType.USER));
         return ResponseEntity.ok(new SignUpResponse(user.getId()));
     }
 
@@ -71,5 +73,15 @@ public class DefaultUserServiceImpl implements UserService {
         userEntity.setPassword(passwordEncoder.encode(request.newPassword()));
         userRepository.save(userEntity);
         return ResponseEntity.ok("Change password successfully");
+    }
+
+    @Override
+    public String getUserAddress(String email) {
+        Optional<UserEntity> optUser = userRepository.findByEmail(email);
+        if (optUser.isEmpty()) {
+            throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User");
+        }
+        UserEntity userEntity = optUser.get();
+        return walletQueryService.getWallet(WalletType.USER, userEntity.getId()).getAddress();
     }
 }

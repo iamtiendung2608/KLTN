@@ -149,6 +149,7 @@
       <column name="deleted" type="boolean" defaultValue="false"/>
     </addColumn>
   </changeSet>
+
   <changeSet id="1.0.8" author="dung.pham">
     <createTable tableName="wallet">
       <column name="address" type="text"/>
@@ -158,5 +159,211 @@
       <column name="type" type="varchar(16)"/>
     </createTable>
     <addPrimaryKey tableName="wallet" columnNames="address"/>
+  </changeSet>
+
+  <changeSet id="1.0.8" author="toan.nguyen">
+    <createTable tableName="employee">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />  
+      </column>
+      <column name="name" type="varchar(128)"/>
+      <column name="phone" type="varchar(16)"/>
+      <column name="address" type="varchar(256)"/>
+      <column name="email" type="varchar(64)"/>
+      <column name="active" type="boolean" defaultValue="false"/>
+      <column name="location_tag_id" type="int">
+        <constraints referencedTableName="location_tag" referencedColumnNames="id" foreignKeyName="employee_location_tag_fk"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1.0.9" author="toan.nguyen">
+    <createTable tableName="order">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="status" type="varchar(50)"/>
+      <column name="total_weight" type="int"/>
+      <column name="total_price" type="int"/>
+      <column name="note" type="varchar(256)"/>
+      <column name="delivery_at" type="timestamp"/>
+      <column name="estimated_delivery_at" type="timestamp"/>
+      <column name="delivery_type" type="varchar(50)"/>
+      <column name="paid_type" type="varchar(50)"/>
+
+      <column name="organization_id" type="int">
+        <constraints referencedTableName="organization" referencedColumnNames="id" foreignKeyName="order_organization_fk"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="item">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="name" type="varchar(128)"/>
+      <column name="price" type="int"/>
+      <column name="weight" type="real"/>
+      <column name="length" type="real"/>
+      <column name="height" type="real"/>
+      <column name="width" type="real"/>
+    </createTable>
+
+    <createTable tableName="order_item">
+      <column name="order_id" type="int">
+        <constraints referencedTableName="order" referencedColumnNames="id" foreignKeyName="orderItem_order_fk"/>
+      </column>
+
+      <column name="item_id" type="int">
+        <constraints referencedTableName="item" referencedColumnNames="id" foreignKeyName="orderItem_item_fk"/>
+      </column>
+
+      <column name="quantity" type="int"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="1.0.10" author="toan.nguyen">
+    <addColumn tableName="item">
+      <column name="item_category" type="varchar(20)"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="1.0.11" author="toan.nguyen">
+    <renameTable oldTableName="order" newTableName="orders" />
+  </changeSet>
+
+  <changeSet id="1.0.12" author="toan.nguyen">
+    <addColumn tableName="orders">
+      <column name="create_at" type="timestamp"/>
+      <column name="modified_at" type="timestamp"/>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="1.0.13" author="toan.nguyen">
+    <renameColumn tableName="orders" oldColumnName="create_at" newColumnName="created_at" />
+  </changeSet>
+  <changeSet id="1.0.13" author="dung.pham">
+    <createTable tableName="employee_post_offices">
+      <column name="employee_id" type="int"/>
+      <column name="post_office_id" type="int"/>
+    </createTable>
+
+    <addForeignKeyConstraint baseTableName="employee_post_offices" baseColumnNames="employee_id" constraintName="employee_post_offices_employee_id_fk"
+                             referencedTableName="employee"
+                             referencedColumnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="employee_post_offices" baseColumnNames="post_office_id" constraintName="employee_post_offices_post_office_id_fk"
+                             referencedTableName="post_offices"
+                             referencedColumnNames="id"/>
+
+    <addPrimaryKey tableName="employee_post_offices" columnNames="employee_id, post_office_id"/>
+
+    <createTable tableName="transaction">
+      <column name="id" type="serial"/>
+      <column name="status" type="varchar(16)"/>
+      <column name="note" type="text"/>
+      <column name="post_office_id" type="int"/>
+      <column name="order_id" type="int"/>
+      <column name="employee_id" type="int"/>
+      <column name="created_at" type="timestamp"/>
+      <column name="modified_at" type="timestamp"/>
+    </createTable>
+
+    <addPrimaryKey tableName="transaction" columnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="employee_id"
+                             constraintName="transaction_employee_id_fk"
+                             referencedTableName="employee"
+                             referencedColumnNames="id"/>
+    
+    <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="post_office_id"
+                             constraintName="transaction_post_offices_id_fk"
+                             referencedTableName="post_offices"
+                             referencedColumnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="order_id"
+                             constraintName="transaction_order_id_fk"
+                             referencedTableName="orders"
+                             referencedColumnNames="id"/>
+  </changeSet>
+  <changeSet id="1.0.14" author="dung.pham">
+    <addColumn tableName="wallet">
+      <column name="user_id" type="int"/>
+    </addColumn>
+
+    <addForeignKeyConstraint baseTableName="wallet" baseColumnNames="user_id" constraintName="wallet_user_id_fk"
+                             referencedTableName="users"
+                             referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="1.0.15" author="dung.pham">
+    <createTable tableName="transfer_object">
+      <column name="id" type="serial"/>
+      <column name="at_office_flg" type="boolean" defaultValue="false"/>
+      <column name="recieve_shift" type="varchar(18)"/>
+      <column name="customer_id" type="int"/>
+      <column name="post_office_id" type="int"/>
+    </createTable>
+
+    <addPrimaryKey tableName="transfer_object" columnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transfer_object" baseColumnNames="customer_id"
+                             constraintName="transfer_object_customer_id_fk"
+                             referencedTableName="customer"
+                             referencedColumnNames="id"/>
+
+    <addForeignKeyConstraint baseTableName="transfer_object" baseColumnNames="post_office_id"
+                             constraintName="transfer_object_post_office_id_fk"
+                             referencedTableName="post_offices"
+                             referencedColumnNames="id"/>
+  </changeSet>
+
+  <changeSet id="1.0.16" author="toan.nguyen">
+    <dropForeignKeyConstraint baseTableName="wallet" constraintName="wallet_user_id_fk"/>
+  </changeSet>
+
+  <changeSet id="1.0.17" author="toan.nguyen">
+    <addColumn tableName="transfer_object">
+      <column name="action_date" type="timestamp"></column>
+    </addColumn>
+  </changeSet>
+  
+  <changeSet id="1.0.18" author="toan.nguyen">
+    <addColumn tableName="orders">
+      <column name="receiver_object_id" type="int">
+        <constraints referencedTableName="transfer_object" 
+          referencedColumnNames="id" 
+          foreignKeyName="order_receiver_transfer_obj_fk"/>
+      </column>
+      
+      <column name="sender_object_id" type="int">
+        <constraints referencedTableName="transfer_object" 
+          referencedColumnNames="id" 
+          foreignKeyName="order_sender_transfer_obj_fk"/>
+      </column>
+    </addColumn>
+
+  </changeSet>
+
+  <changeSet id="1.0.19" author="toan.nguyen">
+    <addColumn tableName="post_offices">
+      <column name="wallet_address" type="text">
+        <constraints referencedTableName="wallet" 
+        referencedColumnNames="address" 
+        foreignKeyName="post_offies_wallet_fk"/>
+      </column>
+    </addColumn>
+
+    <addColumn tableName="organization">
+      <column name="wallet_address" type="text">
+        <constraints referencedTableName="wallet" 
+        referencedColumnNames="address" 
+        foreignKeyName="org_wallet_fk"/>
+      </column>
+    </addColumn>
+
+    <dropColumn tableName="wallet" columnName="user_id"/>
+  </changeSet>
+  <changeSet id="1.0.20" author="toan.nguyen">
+    <renameColumn tableName="verification" oldColumnName="updated_at" newColumnName="modified_at"/>
   </changeSet>
 </databaseChangeLog>

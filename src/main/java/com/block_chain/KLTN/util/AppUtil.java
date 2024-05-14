@@ -1,6 +1,8 @@
 package com.block_chain.KLTN.util;
 
 import com.block_chain.KLTN.domain.wallet.crypto.CryptoLib;
+
+import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.BadPaddingException;
@@ -10,6 +12,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Random;
 
 @Component
@@ -54,5 +58,17 @@ public class AppUtil {
         System.arraycopy(array1, 0, result, 0, array1.length);
         System.arraycopy(array2, 0, result, array1.length, array2.length);
         return result;
+    }
+
+    public static String dateFormatter(LocalDateTime time){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return time.format(formatter);
+    }
+
+    public static String dateFormatter(OffsetDateTime time){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return time.format(formatter);
     }
 }

@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerEntity extends AbstractEntity {
+public class CustomerEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

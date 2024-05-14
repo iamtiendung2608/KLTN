@@ -16,8 +16,6 @@ public class RabbitMqConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-
-
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
@@ -25,11 +23,17 @@ public class RabbitMqConfig {
         return rabbitTemplate;
     }
 
-
     @Value("${rabbitmq.create-wallet-queue}")
     private String createWalletQueue;
     @Bean
     Queue queue() {
         return new Queue(createWalletQueue, Boolean.FALSE);
+    }
+
+    @Value("${rabbitmq.create-transaction-queue}")
+    private String createTransactionQueue;
+    @Bean
+    Queue transactionQueue() {
+        return new Queue(createTransactionQueue, Boolean.FALSE);
     }
 }

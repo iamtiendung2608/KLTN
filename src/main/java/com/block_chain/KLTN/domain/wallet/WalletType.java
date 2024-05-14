@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum WalletType {
-    USER, EMPLOYEE
+    USER, EMPLOYEE, ORGANIZATION, POST_OFFICES
 }

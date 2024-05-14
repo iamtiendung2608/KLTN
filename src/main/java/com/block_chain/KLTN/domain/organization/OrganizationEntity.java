@@ -27,4 +27,7 @@ public class OrganizationEntity {
 
     @Enumerated(EnumType.STRING)
     private OrganizationScope scope;
+
+    @Column(name="wallet_address", unique = true)
+    private String walletAddress;
 }

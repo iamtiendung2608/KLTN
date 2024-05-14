@@ -1,0 +1,43 @@
+### create employee
+POST {{host}}/employee
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "phone": "1234567890",
+  "address": "123 Main Street",
+  "email": "john.doe@example.com",
+  "locationTagId": 123456
+}
+
+
+### update employee
+PUT {{host}}/employee/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "phone": "1234567890",
+  "address": "123 Main Street",
+  "email": "john.doe@example.com",
+  "locationTagId": 123456,
+  "postOfficeId": 7890123
+}
+
+### update employee status
+PATCH {{host}}/employee/1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "active": true
+}
+
+### get employee detail
+GET {{host}}/employee/1
+Authorization: {{token}}
+
+### search employee
+GET {{host}}/employee/1?keyword=abc&locationTagId=2&page=0&size=10
+Authorization: {{token}}
