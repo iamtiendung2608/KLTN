@@ -6,14 +6,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public record OrderCreateRequest(
+public record CreateOrderRequest(
     @NotEmpty List<OrderItemRequest> items,
     @NotNull DeliveryType deliveryType,
     String note,
     @NotNull PaidType paidType,
     @NotNull OrderStatus status,
-    @NotNull Long sender_object_id,
-    @NotNull Long receiver_object_id
+    @NotNull Long senderObjectId,
+    @NotNull Long receiverObjectId
 ) {
     
 }

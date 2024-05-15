@@ -8,8 +8,10 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.block_chain.KLTN.domain.item.ItemEntity;
+import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderRepository;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationRepository;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DefaultTransactionEvent implements TransactionEventService {
 
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
     private final OrganizationRepository organizationRepository;
     private final PostOfficesRepository postOfficesRepository;
 
@@ -42,7 +45,7 @@ public class DefaultTransactionEvent implements TransactionEventService {
     public void createTransactionEvent(TransactionEntity oldTransaction, TransactionEntity newTransaction) {
         OrderEntity order = orderRepository.findById(newTransaction.getOrderId())
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
-        List<ItemAttributeEvent> items = order.getOrderItems()
+        List<ItemAttributeEvent> items = orderItemRepository.findByOrderId(order.getId())
                 .stream().map(item -> transactionEventMapper.toEvent(item.getItem(), item.getQuantity())).toList();
         
         OrderEvent orderEvent = transactionEventMapper.toEvent(order);

@@ -21,7 +21,7 @@ public class OrderItemEntity {
     @JoinColumn(name="order_id")
     private OrderEntity order;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("item_id")
     @JoinColumn(name="item_id")
     private ItemEntity item;

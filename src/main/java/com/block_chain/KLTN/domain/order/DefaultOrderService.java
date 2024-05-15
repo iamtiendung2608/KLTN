@@ -4,8 +4,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,11 +17,8 @@ import com.block_chain.KLTN.domain.order.order_item.OrderItemKey;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemMapper;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
-import com.block_chain.KLTN.domain.order.order_item.OrderItemResponse;
-import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationRepository;
 import com.block_chain.KLTN.domain.transaction.CreateTransactionRequest;
-import com.block_chain.KLTN.domain.transaction.TransactionRepository;
 import com.block_chain.KLTN.domain.transaction.TransactionService;
 import com.block_chain.KLTN.domain.transaction.TransactionStatus;
 import com.block_chain.KLTN.domain.transfer_object.TransferObjectEntity;
@@ -56,10 +51,10 @@ public class DefaultOrderService implements OrderService{
     
     @Override
     @Transactional
-    public OrderResponse createOrder(OrderCreateRequest orderReq) {
-        TransferObjectEntity sender = transferObjectRepository.findById(orderReq.sender_object_id())
+    public OrderResponse createOrder(CreateOrderRequest orderReq) {
+        TransferObjectEntity sender = transferObjectRepository.findById(orderReq.senderObjectId())
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Sender transfer object "));
-        TransferObjectEntity receiver = transferObjectRepository.findById(orderReq.receiver_object_id())
+        TransferObjectEntity receiver = transferObjectRepository.findById(orderReq.receiverObjectId())
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Receiver transfer object "));
         
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -85,19 +80,19 @@ public class DefaultOrderService implements OrderService{
             .deliveryType(orderReq.deliveryType())
             .note(orderReq.note())
             .paidType(orderReq.paidType())
-            .senderObjectId(orderReq.sender_object_id())
-            .receiverObjectId(orderReq.receiver_object_id())
+            .senderObjectId(orderReq.senderObjectId())
+            .receiverObjectId(orderReq.receiverObjectId())
             .organizationId(user.getOrganizationId())
             .senderObject(sender)
             .receiverObject(receiver)
             .build();   
         
-        orderEntity = orderRepository.saveAndFlush(orderEntity);
+        orderEntity = orderRepository.save(orderEntity);
         
         // Handling OrderItem Entity
         List<OrderItemEntity> orderItems = new ArrayList<>();
         for (OrderItemRequest item : orderReq.items()) {
-            ItemEntity itemEntity = itemRepository.saveAndFlush(itemMapper.toEntity(item));
+            ItemEntity itemEntity = itemRepository.save(itemMapper.toEntity(item));
 
             OrderItemEntity orderItem = OrderItemEntity.builder()
                 .id(new OrderItemKey(orderEntity.getId(), itemEntity.getId()))
@@ -109,7 +104,7 @@ public class DefaultOrderService implements OrderService{
             orderItems.add(orderItem);
         }
         orderEntity.setOrderItems(orderItems);
-        orderItemRepository.saveAllAndFlush(orderItems);
+        orderItemRepository.saveAll(orderItems);
 
         if (orderReq.status() == OrderStatus.CREATED) {
             createTransaction(orderEntity.getNote(), orderEntity.getId());
@@ -119,13 +114,14 @@ public class DefaultOrderService implements OrderService{
     }
 
     @Override
+    @Transactional
     public OrderResponse updateOrderStatus(Long id, OrderUpdateStatusRequest orderReq) {
         OrderEntity order = orderRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
         
         if (orderReq.status() == OrderStatus.CREATED) {
             order.setStatus(orderReq.status());
-            orderRepository.saveAndFlush(order);
+            orderRepository.save(order);
             createTransaction(order.getNote(), order.getId());
         }
         
