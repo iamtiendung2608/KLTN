@@ -10,7 +10,6 @@ import com.block_chain.KLTN.event.CustomSpringEventPublisher;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.helper.Mail;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import java.util.Random;
 
 
 @Service
-@Slf4j
 public class DefaultVerifyServiceImpl implements VerifyService {
     private final VerifyRepository verifyRepository;
     private final UserRepository userRepository;

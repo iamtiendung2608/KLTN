@@ -14,8 +14,6 @@ import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class DefaultEmployeeService implements EmployeeService {
     private final EmployeeRepository employeeRepository;
@@ -75,10 +72,10 @@ public class DefaultEmployeeService implements EmployeeService {
                 .password(passwordEncoder.encode(request.password()))
                 .status(UserStatus.ACTIVE)
                 .build();
+                
         user.addRole(role);
         employeeRepository.save(employee);
         userRepository.save(user);
-        //TODO: create new user principal for each employee - Solved
 
         return new CreateEmployeeResponse(employee.getId());
     }

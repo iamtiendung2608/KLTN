@@ -1,6 +1,5 @@
 package com.block_chain.KLTN.domain.wallet;
 
-import com.block_chain.KLTN.domain.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;

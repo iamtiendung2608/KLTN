@@ -4,11 +4,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import com.block_chain.KLTN.domain.item.ItemEntity;
-import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderStatus;
 import com.block_chain.KLTN.domain.order.OrderRepository;
@@ -18,18 +15,15 @@ import com.block_chain.KLTN.domain.organization.OrganizationRepository;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.transaction.TransactionEntity;
-import com.block_chain.KLTN.domain.transaction.TransactionStatus;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.publiser.CreateTransactionProducer;
 import com.block_chain.KLTN.util.AppUtil;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultTransactionEvent implements TransactionEventService {
 
     private final OrderRepository orderRepository;

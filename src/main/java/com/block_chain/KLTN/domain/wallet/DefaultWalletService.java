@@ -10,7 +10,6 @@ import com.block_chain.KLTN.publiser.CreateWalletProducer;
 import com.block_chain.KLTN.util.AppUtil;
 
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

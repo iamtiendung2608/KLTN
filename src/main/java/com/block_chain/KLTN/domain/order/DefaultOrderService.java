@@ -14,7 +14,6 @@ import com.block_chain.KLTN.domain.item.ItemMapper;
 import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemKey;
-import com.block_chain.KLTN.domain.order.order_item.OrderItemMapper;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
 import com.block_chain.KLTN.domain.organization.OrganizationRepository;
@@ -29,11 +28,9 @@ import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultOrderService implements OrderService{
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;

@@ -6,15 +6,12 @@ import com.block_chain.KLTN.domain.auth.SignUpResponse;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
 import com.block_chain.KLTN.domain.verification.VerifyService;
-import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
 import com.block_chain.KLTN.domain.wallet.WalletQueryService;
 import com.block_chain.KLTN.domain.wallet.WalletType;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,9 +22,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultUserServiceImpl implements UserService {
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
