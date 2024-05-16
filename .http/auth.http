@@ -1,0 +1,12 @@
+### create customer
+POST {{host}}/auth/confirm-signup
+Content-Type: application/json
+
+{
+  "id": ,
+  "name": "Cửa hàng thú cưng",
+  "description": "Chuyên cung cấp sản phẩm để chăm sóc, nuôi dưỡng thú cưng",
+  "scale": "SMALL",
+  "category": "FASHION",
+  "scope": "PERSONAL"
+}
