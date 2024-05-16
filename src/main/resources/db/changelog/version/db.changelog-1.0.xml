@@ -366,4 +366,10 @@
   <changeSet id="1.0.20" author="toan.nguyen">
     <renameColumn tableName="verification" oldColumnName="updated_at" newColumnName="modified_at"/>
   </changeSet>
+
+  <changeSet id="1.0.21" author="toan.nguyen">
+    <sql>
+      insert into role (role_code, role_name, description) values ('employee', 'Employee', '');
+    </sql>
+  </changeSet>
 </databaseChangeLog>

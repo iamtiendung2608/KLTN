@@ -1,16 +1,22 @@
 package com.block_chain.KLTN.domain.employee;
 
+import com.block_chain.KLTN.common.AppConstant;
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagRepository;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
-import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
-import com.block_chain.KLTN.domain.wallet.WalletType;
+import com.block_chain.KLTN.domain.user.UserEntity;
+import com.block_chain.KLTN.domain.user.UserRepository;
+import com.block_chain.KLTN.domain.user.UserStatus;
+import com.block_chain.KLTN.domain.user.role.RoleEntity;
+import com.block_chain.KLTN.domain.user.role.RoleRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +31,10 @@ public class DefaultEmployeeService implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final LocationTagRepository locationTagRepository;
     private final PostOfficesRepository postOfficesRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+
+    private final PasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
     private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -37,11 +47,17 @@ public class DefaultEmployeeService implements EmployeeService {
         List<PostOfficesEntity> postOfficesEntityList = postOfficesRepository.findAllById(
             request.postOfficeIds());
 
+        
+        List<RoleEntity> roles = roleRepository.findAll();
+        RoleEntity role = roles.stream()
+            .filter(i -> AppConstant.Roles.EMPLOYEE.getRoleCode().equals(i.getRoleCode())).findFirst().get();
+    
         if (postOfficesEntityList.size() != request.postOfficeIds().size()) {
             throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office");
         }
 
-        if (existUser.isPresent()) {
+
+        if (existUser.isPresent() || userRepository.existsByEmail(request.email())) {
             throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "User");
         }
 
@@ -54,8 +70,16 @@ public class DefaultEmployeeService implements EmployeeService {
                 .postOffices(new HashSet<>(postOfficesEntityList))
                 .locationTagId(locationTag.getId())
                 .build();
+        
+        UserEntity user = UserEntity.builder()
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
+                .status(UserStatus.ACTIVE)
+                .build();
+        user.addRole(role);
         employeeRepository.save(employee);
-        //TODO: create new user principal for each employee
+        userRepository.save(user);
+        //TODO: create new user principal for each employee - Solved
 
         return new CreateEmployeeResponse(employee.getId());
     }

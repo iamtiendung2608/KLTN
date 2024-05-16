@@ -7,6 +7,7 @@ Content-Type: application/json
   "phone": "1234567890",
   "address": "123 Main Street",
   "email": "john.doe@example.com",
+  "password": "123456"
   "locationTagId": 123456
 }
 
@@ -22,7 +23,21 @@ Content-Type: application/json
   "address": "123 Main Street",
   "email": "john.doe@example.com",
   "locationTagId": 123456,
-  "postOfficeId": 7890123
+  "postOfficeIds": [
+    1
+  ]
+}
+
+{
+  "name": "Nguyễn Đức Toàn",
+  "phone": "0375325687",
+  "address": "1/23 Đường Linh Đông",
+  "email": "toandungpqkg@blockchain.com",
+  "password": "123456",
+  "locationTagId": 1,
+  "postOfficeIds": [
+    1, 2, 3
+  ]
 }
 
 ### update employee status
