@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.post_offices;
+package com.block_chain.KLTN.domain.postOffices;
 
 import com.block_chain.KLTN.common.OptionalBooleanBuilder;
 import com.querydsl.core.types.Predicate;

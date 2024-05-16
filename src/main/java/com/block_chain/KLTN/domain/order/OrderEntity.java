@@ -3,7 +3,8 @@ package com.block_chain.KLTN.domain.order;
 import com.block_chain.KLTN.common.AbstractEntity;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
-import com.block_chain.KLTN.domain.transfer_object.TransferObjectEntity;
+import com.block_chain.KLTN.domain.transferObject.TransferObjectEntity;
+
 import lombok.*;
 
 import javax.persistence.*;

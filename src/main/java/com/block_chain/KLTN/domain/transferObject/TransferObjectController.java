@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.transfer_object;
+package com.block_chain.KLTN.domain.transferObject;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

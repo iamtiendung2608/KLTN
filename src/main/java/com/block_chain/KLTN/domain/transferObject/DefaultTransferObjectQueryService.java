@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.transfer_object;
+package com.block_chain.KLTN.domain.transferObject;
 
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;

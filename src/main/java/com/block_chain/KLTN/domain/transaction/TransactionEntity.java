@@ -3,7 +3,8 @@ package com.block_chain.KLTN.domain.transaction;
 import com.block_chain.KLTN.common.AbstractEntity;
 import com.block_chain.KLTN.domain.employee.EmployeeEntity;
 import com.block_chain.KLTN.domain.order.OrderEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+
 import lombok.*;
 
 import javax.persistence.*;

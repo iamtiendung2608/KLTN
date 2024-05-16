@@ -1,6 +1,6 @@
 package com.block_chain.KLTN.domain.transaction;
 
-import com.block_chain.KLTN.domain.post_offices.PostOfficesResponse;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesResponse;
 
 public record TransactionDetailResponse(
         Long id,

@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.post_offices;
+package com.block_chain.KLTN.domain.postOffices;
 
 import javax.validation.constraints.NotEmpty;
 

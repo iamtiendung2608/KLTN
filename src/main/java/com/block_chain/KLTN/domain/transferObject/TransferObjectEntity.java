@@ -1,7 +1,8 @@
-package com.block_chain.KLTN.domain.transfer_object;
+package com.block_chain.KLTN.domain.transferObject;
 
 import com.block_chain.KLTN.domain.customer.CustomerEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+
 import lombok.*;
 
 import javax.persistence.*;

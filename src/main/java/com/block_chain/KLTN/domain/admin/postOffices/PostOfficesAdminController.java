@@ -2,7 +2,7 @@ package com.block_chain.KLTN.domain.admin.postOffices;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.block_chain.KLTN.domain.post_offices.*;
+import com.block_chain.KLTN.domain.postOffices.*;
 
 import lombok.RequiredArgsConstructor;
 

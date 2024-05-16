@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.transfer_object;
+package com.block_chain.KLTN.domain.transferObject;
 
 import com.block_chain.KLTN.common.repository.QueryDslRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
