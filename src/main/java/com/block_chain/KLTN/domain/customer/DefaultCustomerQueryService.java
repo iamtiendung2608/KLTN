@@ -1,5 +1,6 @@
 package com.block_chain.KLTN.domain.customer;
 
+import com.block_chain.KLTN.domain.admin.customer.CustomerAdminSearchRequest;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;
@@ -37,5 +38,10 @@ public class DefaultCustomerQueryService implements CustomerQueryService {
     public Page<CustomerResponse> searchCustomer(UserPrincipal user, CustomerSearchRequest request, Pageable pageable) {
         UserEntity userEntity = userRepository.findById(user.getId()).orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
         return customerRepository.findAll(request.toPredicate(userEntity.getOrganizationId()), pageable).map(customerMapper::toResponse);
+    }
+
+    @Override
+    public Page<CustomerResponse> searchCustomer(CustomerAdminSearchRequest request, Pageable pageable) {
+        return customerRepository.findAll(request.toPredicate(), pageable).map(customerMapper::toResponse);
     }
 }

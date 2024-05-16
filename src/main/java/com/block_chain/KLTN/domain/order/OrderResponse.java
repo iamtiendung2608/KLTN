@@ -18,6 +18,8 @@ public record OrderResponse(
     OffsetDateTime createdAt,
     OffsetDateTime updatedAt,
     Long organizationId,
+    Long senderObjectId,
+    Long receiverObjectId,
     List<OrderItemResponse> items
 ) {
     

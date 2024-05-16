@@ -29,5 +29,7 @@ Content-Type: application/json
   "deliveryType": "FAST",
   "note": "Giao nhanh nhanh tí có việc",
   "paidType": "SENDER",
-  "status": "DRAFT"
+  "status": "DRAFT",
+  "sender_object_id": 0,
+  "receiver_object_id": 0
 }

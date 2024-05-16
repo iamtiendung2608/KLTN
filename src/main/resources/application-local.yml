@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:15432/blockchain
+    url: jdbc:postgresql://127.0.0.1:15432/blockchain
     username: blockchain
     password: blockchain
     driver-class-name: org.postgresql.Driver

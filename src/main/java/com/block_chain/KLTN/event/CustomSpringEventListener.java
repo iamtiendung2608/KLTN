@@ -1,5 +1,7 @@
 package com.block_chain.KLTN.event;
 
+import com.block_chain.KLTN.domain.transactionEvent.CreateTransactionEvent;
+import com.block_chain.KLTN.domain.transactionEvent.TransactionEventService;
 import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
 import com.block_chain.KLTN.domain.wallet.WalletService;
 import com.block_chain.KLTN.helper.EmailSenderService;
@@ -18,6 +20,7 @@ import javax.mail.MessagingException;
 public class CustomSpringEventListener {
     private final EmailSenderService emailSenderService;
     private final WalletService walletService;
+    private final TransactionEventService transactionEventService;
 
     @Async
     @EventListener(classes = CustomSpringEvent.class)
@@ -35,6 +38,13 @@ public class CustomSpringEventListener {
     public void handleTransactionProcessedEvent(CreateWalletEvent event) {
         log.debug("Received create wallet event: " + event);
         walletService.createWallet(event);
+    }
+
+    @Async
+    @TransactionalEventListener
+    public void handleTransactionProcessedEvent(CreateTransactionEvent event) {
+        log.debug("Received create wallet event: " + event);
+        transactionEventService.createTransactionEvent(event.oldTransaction(), event.newTransaction());
     }
 
 }

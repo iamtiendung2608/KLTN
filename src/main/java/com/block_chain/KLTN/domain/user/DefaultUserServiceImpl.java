@@ -54,7 +54,7 @@ public class DefaultUserServiceImpl implements UserService {
         user.addRole(role);
         userRepository.save(user);
         verifyService.createVerify(user);
-        applicationEventPublisher.publishEvent(new CreateWalletEvent(Long.toString(user.getId()), WalletType.USER, user.getId()));
+        // applicationEventPublisher.publishEvent(new CreateWalletEvent(user.getId(), WalletType.USER));
         return ResponseEntity.ok(new SignUpResponse(user.getId()));
     }
 

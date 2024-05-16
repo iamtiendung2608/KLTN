@@ -4,11 +4,17 @@ import com.block_chain.KLTN.domain.employee.EmployeeEntity;
 import com.block_chain.KLTN.domain.employee.EmployeeRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderRepository;
+import com.block_chain.KLTN.domain.order.OrderStatus;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.transactionEvent.CreateTransactionEvent;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+
+import liquibase.pro.packaged.aP;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,30 +27,73 @@ public class DefaultTransactionService implements TransactionService {
     private final OrderRepository orderRepository;
     private final EmployeeRepository employeeRepository;
     private final TransactionRepository transactionRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private final TransactionMapper transactionMapper;
 
     @Override
     @Transactional
     public CreateTransactionResponse createTransaction(CreateTransactionRequest request) {
-        PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+        TransactionEntity oldTransaction = transactionRepository.findLastTransaction(request.orderId());
+        
         OrderEntity order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
 
         TransactionEntity transaction = TransactionEntity.builder()
-                .status(request.status())
-                .note(request.note())
-                .postOfficeId(postOffice.getId())
-                .orderId(order.getId())
-                .build();
+                    .status(request.status())
+                    .note(request.note())
+                    .orderId(request.orderId())
+                    .order(order)
+                    .employeeId(request.employeeId())
+                    .postOfficeId(request.postOfficeId())
+                    .build();
 
-        if (!Objects.isNull(request.employeeId())) {
-            EmployeeEntity employee = employeeRepository.findById(request.employeeId())
+        switch (transaction.getStatus()) {
+            case RECEIVED:
+            case TRANSPORTED:
+            case DELIVERING:
+            case DELIVERIED:
+            case TRANSPORTING:{
+                PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+                    .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
+                EmployeeEntity employeeEntity = employeeRepository.findById(request.employeeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
-            transaction.setEmployeeId(employee.getId());
+
+                transaction.setPostOffice(postOffice);
+                transaction.setEmployee(employeeEntity);
+                applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
+                break;
+            }
+                
+            case CREATED:{
+                if (Objects.nonNull(oldTransaction)) {
+                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Đơn hàng đã được gửi đến kho hàng");
+                }
+                applicationEventPublisher.publishEvent(new CreateTransactionEvent(null, transaction));
+                break;
+            }
+            default:
+                throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Transaction Status");
         }
-
-        transactionRepository.save(transaction);
+        
+        transaction = transactionRepository.save(transaction);
         return new CreateTransactionResponse(transaction.getId());
+        
+    }
 
+
+    /*
+    * We dont need this
+    */
+    @Override
+    @Transactional
+    public TransactionResponse updateTransactionStatus(UpdateTransactionRequest request) {
+        TransactionEntity transaction = transactionRepository.findById(request.id())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Transaction"));
+        
+        //To-do can not set staus deliveried if staus is sent 
+        transaction.setStatus(request.status());
+        transactionRepository.save(transaction);
+        return transactionMapper.toResponse(transaction);
     }
 }

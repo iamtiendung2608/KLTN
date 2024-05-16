@@ -36,4 +36,7 @@ public class PostOfficesEntity {
     private LocationTagEntity locationTag;
 
     private boolean deleted;
+
+    @Column(name="wallet_address", unique = true)
+    private String walletAddress;
 }

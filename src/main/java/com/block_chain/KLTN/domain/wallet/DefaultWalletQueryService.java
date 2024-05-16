@@ -12,7 +12,7 @@ public class DefaultWalletQueryService implements WalletQueryService {
 
 
     @Override
-    public WalletEntity getWallet(WalletType type, long userId) {
-        return walletRepository.findByTypeAndUserId(type, userId).orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "wallet"));
+    public WalletEntity getWallet(WalletType type, long code) {
+        return walletRepository.findByTypeAndCode(type, code).orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "wallet"));
     }
 }

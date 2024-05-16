@@ -19,14 +19,7 @@ public class WalletEntity {
     @Column(name = "salt_iv")
     private String saltIv;
 
-    private String code;
+    private Long code;
     @Enumerated(EnumType.STRING)
     private WalletType type;
-
-    @Column(name = "user_id")
-    private Long userId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private UserEntity user;
 }
