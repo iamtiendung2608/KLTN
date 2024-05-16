@@ -20,9 +20,6 @@ public class ItemEntity {
     private String name;
     private Integer price;
     private Float weight;
-    private Float length;
-    private Float height;
-    private Float width;
 
     @Enumerated(EnumType.STRING)
     @Column(name="item_category")

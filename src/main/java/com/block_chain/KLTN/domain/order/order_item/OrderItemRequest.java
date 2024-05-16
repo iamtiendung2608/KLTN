@@ -6,9 +6,6 @@ public record OrderItemRequest(
     String name,
     int price,
     float weight,
-    float length,
-    float height,
-    float width,
     ItemCategory itemCategory,
     
     int quantity
