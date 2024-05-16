@@ -1,5 +1,7 @@
 package com.block_chain.KLTN.domain.transaction;
 
+import com.block_chain.KLTN.domain.order.OrderStatus;
+
 import lombok.Getter;
 
 @Getter
@@ -9,6 +11,6 @@ public enum TransactionStatus {
     TRANSPORTING,
     TRANSPORTED,
     DELIVERING,
-    DELIVERIED
+    DELIVERIED;
     // To-do: some status for exception
 }
