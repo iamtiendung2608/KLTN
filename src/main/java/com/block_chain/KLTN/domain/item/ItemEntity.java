@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
+import com.block_chain.KLTN.domain.order.orderItem.OrderItemEntity;
 
 import lombok.*;
 

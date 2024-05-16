@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.order.order_item;
+package com.block_chain.KLTN.domain.order.orderItem;
 
 import java.io.Serializable;
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
+import com.block_chain.KLTN.domain.order.orderItem.OrderItemRequest;
 
 @Mapper(componentModel = "spring")
 public interface ItemMapper {
