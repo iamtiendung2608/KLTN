@@ -28,6 +28,7 @@ Content-Type: application/json
   "receiver_object_id": 0
 }
 
+----
 {
   "items": [
     {
@@ -56,6 +57,6 @@ Content-Type: application/json
   "note": "Lấy loại hải sản, còn bộ dụng cụ lấy loại decord hình mèo mình",
   "paidType": "SENDER",
   "status": "DRAFT",
-  "sender_object_id": 0,
-  "receiver_object_id": 0
+  "senderObjectId": 0,
+  "receiverObjectId": 0
 }

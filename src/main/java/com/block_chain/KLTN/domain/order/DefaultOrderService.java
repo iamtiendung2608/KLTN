@@ -63,7 +63,7 @@ public class DefaultOrderService implements OrderService{
         // Handling Order Entity
         int totalPrice = orderReq.items()
             .stream().reduce(0, (subTotal, item) -> subTotal + item.price() * item.quantity(), Integer::sum); 
-        float totalWeight = orderReq.items()
+        Float totalWeight = orderReq.items()
             .stream().reduce(0f, (subTotal, item) -> subTotal + item.weight() * item.quantity(), Float::sum);
         OffsetDateTime estimatedDeliveryAt = OffsetDateTime.now().plusDays(7L);
         

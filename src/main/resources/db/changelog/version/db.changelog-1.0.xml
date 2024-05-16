@@ -382,4 +382,8 @@
   <changeSet id="1.1.2" author="toan.nguyen">
     <renameColumn tableName="item" oldColumnName="width" newColumnName="weight"/>
   </changeSet>
+
+  <changeSet id="1.1.3" author="toan.nguyen">
+    <modifyDataType tableName="orders" columnName="total_weight" newDataType="real" />
+  </changeSet>
 </databaseChangeLog>
