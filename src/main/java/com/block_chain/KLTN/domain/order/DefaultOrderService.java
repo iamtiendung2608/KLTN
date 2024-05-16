@@ -28,7 +28,6 @@ import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 
-import liquibase.hub.model.Organization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,7 +46,6 @@ public class DefaultOrderService implements OrderService{
 
     private final OrderMapper orderMapper;
     private final ItemMapper itemMapper;
-    private final OrderItemMapper orderItemMapper;
     
     @Override
     @Transactional

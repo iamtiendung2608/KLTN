@@ -2,7 +2,6 @@ package com.block_chain.KLTN.domain.employee;
 
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagRepository;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;

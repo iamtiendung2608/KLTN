@@ -36,7 +36,6 @@ public class DefaultEmployeeService implements EmployeeService {
 
     private final PasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional

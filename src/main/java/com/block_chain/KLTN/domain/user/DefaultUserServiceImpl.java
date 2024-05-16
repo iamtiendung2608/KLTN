@@ -84,4 +84,6 @@ public class DefaultUserServiceImpl implements UserService {
         UserEntity userEntity = optUser.get();
         return walletQueryService.getWallet(WalletType.USER, userEntity.getId()).getAddress();
     }
+
+    
 }

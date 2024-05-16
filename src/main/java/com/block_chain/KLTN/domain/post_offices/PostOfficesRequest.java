@@ -1,6 +1,5 @@
 package com.block_chain.KLTN.domain.post_offices;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 
 public record PostOfficesRequest(

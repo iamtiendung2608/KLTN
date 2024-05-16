@@ -1,7 +1,5 @@
 package com.block_chain.KLTN.domain.transaction;
 
-import com.block_chain.KLTN.domain.order.OrderStatus;
-
 import lombok.Getter;
 
 @Getter
