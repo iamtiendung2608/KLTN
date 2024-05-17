@@ -7,7 +7,6 @@ import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
 import com.block_chain.KLTN.domain.verification.VerifyService;
 import com.block_chain.KLTN.domain.wallet.WalletQueryService;
-import com.block_chain.KLTN.domain.wallet.WalletType;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.security.UserPrincipal;
@@ -71,13 +70,12 @@ public class DefaultUserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUserAddress(String email) {
+    public String getUserRole(String email) {
         Optional<UserEntity> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
             throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User");
         }
-        UserEntity userEntity = optUser.get();
-        return walletQueryService.getWallet(WalletType.USER, userEntity.getId()).getAddress();
+        return optUser.get().getUserRoles().stream().findFirst().get().getRoleCode();
     }
 
     

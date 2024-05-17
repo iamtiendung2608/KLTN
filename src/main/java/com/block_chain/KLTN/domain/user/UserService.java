@@ -11,5 +11,5 @@ public interface UserService {
 
     ResponseEntity<?> changePassword(UserPrincipal user, ChangePasswordRequest request);
 
-    String getUserAddress(String email);
+    String getUserRole(String email);
 }

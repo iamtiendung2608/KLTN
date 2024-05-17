@@ -6,6 +6,7 @@ import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -32,11 +33,11 @@ public class DefaultTransferObjectService implements TransferObjectService {
                 .actionDate(request.actionDate())
                 .build();
 
-        if (request.postOfficeId() != null) {
-                PostOfficesEntity optPostOffice = postOfficesRepository.findById(request.postOfficeId())
-                        .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
-                
-                entity.setPostOfficeId(optPostOffice.getId());
+        if (request.atOfficeFlg() && !Objects.isNull(request.postOfficeId())) {
+            PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+
+            entity.setPostOfficeId(postOffice.getId());
         }
         transferObjectRepository.save(entity);
         return new CreateTransferObjectResponse(entity.getId());
