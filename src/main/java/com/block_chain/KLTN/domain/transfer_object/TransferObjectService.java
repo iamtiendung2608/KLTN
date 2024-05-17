@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.transferObject;
+package com.block_chain.KLTN.domain.transfer_object;
 
 public interface TransferObjectService {
     CreateTransferObjectResponse create(TransferObjectRequest request);

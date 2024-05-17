@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.transferObject;
+package com.block_chain.KLTN.domain.transfer_object;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

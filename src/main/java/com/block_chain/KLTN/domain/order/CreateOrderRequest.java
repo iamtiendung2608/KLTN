@@ -3,7 +3,7 @@ package com.block_chain.KLTN.domain.order;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.block_chain.KLTN.domain.order.orderItem.OrderItemRequest;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
 
 import java.util.List;
 

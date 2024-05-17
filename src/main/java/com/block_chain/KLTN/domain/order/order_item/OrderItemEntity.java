@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.order.orderItem;
+package com.block_chain.KLTN.domain.order.order_item;
 
 import javax.persistence.*;
 

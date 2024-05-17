@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderStatus;
-import com.block_chain.KLTN.domain.order.orderItem.OrderItemRepository;
+import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.order.OrderRepository;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationRepository;
 import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.transaction.TransactionEntity;
-import com.block_chain.KLTN.domain.transferObject.TransferObjectEntity;
+import com.block_chain.KLTN.domain.transfer_object.TransferObjectEntity;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.publiser.CreateTransactionProducer;

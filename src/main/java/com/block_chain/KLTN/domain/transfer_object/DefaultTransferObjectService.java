@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.transferObject;
+package com.block_chain.KLTN.domain.transfer_object;
 
 import com.block_chain.KLTN.domain.customer.CustomerEntity;
 import com.block_chain.KLTN.domain.customer.CustomerRepository;
