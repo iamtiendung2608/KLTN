@@ -1,7 +1,11 @@
 package com.block_chain.KLTN.domain.order;
 
+import com.block_chain.KLTN.domain.user.UserEntity;
+import com.block_chain.KLTN.domain.user.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.block_chain.KLTN.exception.BusinessException;
@@ -14,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class DefaultOrderQueryService implements OrderQueryService{
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final UserRepository userRepository;
 
     @Override
     public OrderResponse getOrder(Long id) {
@@ -24,6 +29,9 @@ public class DefaultOrderQueryService implements OrderQueryService{
 
     @Override
     public Page<OrderResponse> searchOrder(OrderSearchRequest request, Pageable pageable) {
-        return orderRepository.findAll(request.toPredicate(), pageable).map(orderMapper::toResponse);
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByEmail(userDetail.getUsername())
+            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
+        return orderRepository.findAll(request.toPredicate(userEntity.getOrganizationId()), pageable).map(orderMapper::toResponse);
     }
 }
