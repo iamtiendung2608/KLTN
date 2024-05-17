@@ -4,18 +4,15 @@ import com.block_chain.KLTN.domain.employee.EmployeeEntity;
 import com.block_chain.KLTN.domain.employee.EmployeeRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderRepository;
-import com.block_chain.KLTN.domain.order.OrderStatus;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.transactionEvent.CreateTransactionEvent;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 
-import liquibase.pro.packaged.aP;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -42,16 +39,11 @@ public class DefaultTransactionService implements TransactionService {
         OrderEntity order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
 
-        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
-            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
-
         TransactionEntity transaction = TransactionEntity.builder()
                     .status(request.status())
                     .note(request.note())
                     .orderId(request.orderId())
                     .order(order)
-                    .employeeId(employee.getId())
                     .postOfficeId(request.postOfficeId())
                     .build();
 
@@ -63,11 +55,13 @@ public class DefaultTransactionService implements TransactionService {
             case TRANSPORTING:{
                 PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
-                EmployeeEntity employeeEntity = employeeRepository.findById(employee.getId())
+                UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
-
+        
                 transaction.setPostOffice(postOffice);
-                transaction.setEmployee(employeeEntity);
+                transaction.setEmployee(employee);
+                transaction.setEmployeeId(employee.getId());
                 applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
                 break;
             }

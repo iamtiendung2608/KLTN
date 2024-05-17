@@ -3,7 +3,6 @@ package com.block_chain.KLTN.domain.order;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.block_chain.KLTN.domain.item.ItemEntity;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemResponse;
 
 public record OrderResponse(

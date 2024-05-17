@@ -3,8 +3,8 @@ package com.block_chain.KLTN.domain.employee;
 import com.block_chain.KLTN.common.AppConstant;
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagRepository;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.domain.user.UserStatus;
@@ -14,8 +14,6 @@ import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class DefaultEmployeeService implements EmployeeService {
     private final EmployeeRepository employeeRepository;
@@ -36,7 +33,6 @@ public class DefaultEmployeeService implements EmployeeService {
 
     private final PasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -76,10 +72,10 @@ public class DefaultEmployeeService implements EmployeeService {
                 .password(passwordEncoder.encode(request.password()))
                 .status(UserStatus.ACTIVE)
                 .build();
+                
         user.addRole(role);
         employeeRepository.save(employee);
         userRepository.save(user);
-        //TODO: create new user principal for each employee - Solved
 
         return new CreateEmployeeResponse(employee.getId());
     }

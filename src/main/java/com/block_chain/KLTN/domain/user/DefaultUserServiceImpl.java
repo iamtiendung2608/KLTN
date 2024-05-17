@@ -11,8 +11,6 @@ import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,9 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultUserServiceImpl implements UserService {
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
@@ -81,4 +77,6 @@ public class DefaultUserServiceImpl implements UserService {
         }
         return optUser.get().getUserRoles().stream().findFirst().get().getRoleCode();
     }
+
+    
 }

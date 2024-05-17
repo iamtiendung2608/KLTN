@@ -5,9 +5,6 @@ public record ItemResponse(
     String name,
     int price,
     float weight,
-    float length,
-    float height,
-    float width,
     ItemCategory itemCategory
 ) {
     

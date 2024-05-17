@@ -1,35 +1,31 @@
 package com.block_chain.KLTN.domain.transactionEvent;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import com.block_chain.KLTN.domain.item.ItemEntity;
-import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
 import com.block_chain.KLTN.domain.order.OrderStatus;
-import com.block_chain.KLTN.domain.order.OrderRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
+import com.block_chain.KLTN.domain.order.OrderRepository;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationRepository;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.transaction.TransactionEntity;
-import com.block_chain.KLTN.domain.transaction.TransactionStatus;
+import com.block_chain.KLTN.domain.transfer_object.TransferObjectEntity;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.publiser.CreateTransactionProducer;
 import com.block_chain.KLTN.util.AppUtil;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultTransactionEvent implements TransactionEventService {
 
     private final OrderRepository orderRepository;
@@ -73,12 +69,17 @@ public class DefaultTransactionEvent implements TransactionEventService {
                 OrganizationEntity organization = organizationRepository.findById(order.getOrganizationId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Organization"));
             
-                PostOfficesEntity postOfficesEntity = postOfficesRepository.findById(newTransaction.getPostOfficeId())
+                PostOfficesEntity postOffices = postOfficesRepository.findById(newTransaction.getPostOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
                 
                 senderAddress = organization.getWalletAddress();
-                receiverAddress = postOfficesEntity.getWalletAddress();
-                receiverName = postOfficesEntity.getName();
+                receiverAddress = postOffices.getWalletAddress();
+                receiverName = postOffices.getName();
+
+                TransferObjectEntity sender_obj = order.getSenderObject();
+                sender_obj.setActionDate(OffsetDateTime.now());
+                sender_obj.setPostOfficeId(postOffices.getId());
+                order.setSenderObject(sender_obj);
                 break;
             }
             case TRANSPORTING:{
@@ -104,7 +105,16 @@ public class DefaultTransactionEvent implements TransactionEventService {
                 receiverName = postOffices.getName();
                 break;
             }
-            case DELIVERING:
+            case DELIVERING:{
+                // sender: postOffice - receiver: END_USER
+                PostOfficesEntity postOffices = postOfficesRepository.findById(newTransaction.getPostOfficeId())
+                    .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
+                
+                senderAddress = postOffices.getWalletAddress();
+                receiverAddress = "END_USER";
+                receiverName = "END_USER";
+                break;
+            }
             case DELIVERIED:{
                 // sender: postOffice - receiver: END_USER
                 PostOfficesEntity postOffices = postOfficesRepository.findById(newTransaction.getPostOfficeId())
@@ -113,6 +123,11 @@ public class DefaultTransactionEvent implements TransactionEventService {
                 senderAddress = postOffices.getWalletAddress();
                 receiverAddress = "END_USER";
                 receiverName = "END_USER";
+
+                TransferObjectEntity receiver_obj = order.getReceiverObject();
+                receiver_obj.setActionDate(OffsetDateTime.now());
+                receiver_obj.setPostOfficeId(postOffices.getId());
+                order.setReceiverObject(receiver_obj);
                 break;
             }
             default:

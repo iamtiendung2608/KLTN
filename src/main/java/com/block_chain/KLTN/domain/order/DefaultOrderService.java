@@ -14,7 +14,6 @@ import com.block_chain.KLTN.domain.item.ItemMapper;
 import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemKey;
-import com.block_chain.KLTN.domain.order.order_item.OrderItemMapper;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRequest;
 import com.block_chain.KLTN.domain.organization.OrganizationRepository;
@@ -28,13 +27,10 @@ import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 
-import liquibase.hub.model.Organization;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class DefaultOrderService implements OrderService{
     private final OrderRepository orderRepository;
     private final ItemRepository itemRepository;
@@ -47,7 +43,6 @@ public class DefaultOrderService implements OrderService{
 
     private final OrderMapper orderMapper;
     private final ItemMapper itemMapper;
-    private final OrderItemMapper orderItemMapper;
     
     @Override
     @Transactional
@@ -68,7 +63,7 @@ public class DefaultOrderService implements OrderService{
         // Handling Order Entity
         int totalPrice = orderReq.items()
             .stream().reduce(0, (subTotal, item) -> subTotal + item.price() * item.quantity(), Integer::sum); 
-        float totalWeight = orderReq.items()
+        Float totalWeight = orderReq.items()
             .stream().reduce(0f, (subTotal, item) -> subTotal + item.weight() * item.quantity(), Float::sum);
         OffsetDateTime estimatedDeliveryAt = OffsetDateTime.now().plusDays(7L);
         
