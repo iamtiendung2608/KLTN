@@ -6,7 +6,8 @@ public class AppConstant {
     @Getter
     public enum Roles {
         SUPER_ADMIN("super_admin", "Super Admin"),
-        USER("user", "User");
+        USER("user", "User"),
+        EMPLOYEE("employee", "Employee");
 
         private String roleCode;
         private String roleName;

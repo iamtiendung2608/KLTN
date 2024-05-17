@@ -15,6 +15,9 @@ import liquibase.pro.packaged.aP;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,12 +42,16 @@ public class DefaultTransactionService implements TransactionService {
         OrderEntity order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
 
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
+            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
+
         TransactionEntity transaction = TransactionEntity.builder()
                     .status(request.status())
                     .note(request.note())
                     .orderId(request.orderId())
                     .order(order)
-                    .employeeId(request.employeeId())
+                    .employeeId(employee.getId())
                     .postOfficeId(request.postOfficeId())
                     .build();
 
@@ -56,7 +63,7 @@ public class DefaultTransactionService implements TransactionService {
             case TRANSPORTING:{
                 PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
-                EmployeeEntity employeeEntity = employeeRepository.findById(request.employeeId())
+                EmployeeEntity employeeEntity = employeeRepository.findById(employee.getId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
 
                 transaction.setPostOffice(postOffice);

@@ -133,7 +133,6 @@ public class DefaultOrderService implements OrderService{
                 new CreateTransactionRequest(TransactionStatus.CREATED, 
                     note, 
                     id, 
-                    null, 
                     null));
     }
 }

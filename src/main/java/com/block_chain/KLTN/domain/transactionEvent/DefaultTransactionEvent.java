@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.block_chain.KLTN.domain.item.ItemEntity;
 import com.block_chain.KLTN.domain.item.ItemRepository;
 import com.block_chain.KLTN.domain.order.OrderEntity;
+import com.block_chain.KLTN.domain.order.OrderStatus;
 import com.block_chain.KLTN.domain.order.OrderRepository;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemRepository;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
@@ -117,6 +118,9 @@ public class DefaultTransactionEvent implements TransactionEventService {
             default:
                 throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Transaction status");
         }
+        
+        order.setStatus(OrderStatus.get(newTransaction.getStatus()));
+        orderRepository.save(order);
         
         TransactionEventEntity transaction_event = TransactionEventEntity.builder()
             .transaction_id(newTransaction.getId())
