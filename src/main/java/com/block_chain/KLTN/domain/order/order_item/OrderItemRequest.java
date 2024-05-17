@@ -7,7 +7,6 @@ public record OrderItemRequest(
     int price,
     float weight,
     ItemCategory itemCategory,
-    
     int quantity
 ) {
     

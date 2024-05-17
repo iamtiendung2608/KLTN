@@ -6,6 +6,7 @@ import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +22,20 @@ public class DefaultTransferObjectService implements TransferObjectService {
     public CreateTransferObjectResponse create(TransferObjectRequest request) {
         CustomerEntity customer = customerRepository.findById(request.customerId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Customer"));
-        PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
 
         TransferObjectEntity entity = TransferObjectEntity.builder()
                 .atOfficeFlg(request.atOfficeFlg())
                 .receiveShift(request.receiveShift())
                 .customerId(customer.getId())
-                .postOfficeId(postOffice.getId())
                 .actionDate(request.actionDate())
                 .build();
+
+        if (request.atOfficeFlg() && !Objects.isNull(request.postOfficeId())) {
+            PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office"));
+
+            entity.setPostOfficeId(postOffice.getId());
+        }
         transferObjectRepository.save(entity);
         return new CreateTransferObjectResponse(entity.getId());
     }
