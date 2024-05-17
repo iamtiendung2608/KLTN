@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.post_offices;
+package com.block_chain.KLTN.domain.postOffices;
 
 import com.block_chain.KLTN.common.repository.QueryDslRepository;
 import org.springframework.data.jpa.repository.JpaRepository;

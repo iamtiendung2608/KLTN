@@ -1,8 +1,5 @@
 package com.block_chain.KLTN.domain.transactionEvent;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-
 import com.block_chain.KLTN.domain.transaction.TransactionStatus;
 
 import lombok.AllArgsConstructor;

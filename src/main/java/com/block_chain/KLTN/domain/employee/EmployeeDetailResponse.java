@@ -1,7 +1,6 @@
 package com.block_chain.KLTN.domain.employee;
 
 import com.block_chain.KLTN.domain.location_tag.LocationTagResponse;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesResponse;
 
 import java.time.OffsetDateTime;
 

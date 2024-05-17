@@ -1,6 +1,5 @@
 package com.block_chain.KLTN.domain.customer;
 
-import com.block_chain.KLTN.common.AbstractEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import lombok.*;

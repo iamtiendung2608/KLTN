@@ -1,8 +1,8 @@
 package com.block_chain.KLTN.domain.employee;
 
-import com.block_chain.KLTN.common.AbstractEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

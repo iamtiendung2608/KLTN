@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.post_offices;
+package com.block_chain.KLTN.domain.postOffices;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

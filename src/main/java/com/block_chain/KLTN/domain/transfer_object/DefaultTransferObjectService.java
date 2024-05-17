@@ -2,12 +2,15 @@ package com.block_chain.KLTN.domain.transfer_object;
 
 import com.block_chain.KLTN.domain.customer.CustomerEntity;
 import com.block_chain.KLTN.domain.customer.CustomerRepository;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesEntity;
-import com.block_chain.KLTN.domain.post_offices.PostOfficesRepository;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
+import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,4 +1,4 @@
-package com.block_chain.KLTN.domain.post_offices;
+package com.block_chain.KLTN.domain.postOffices;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
