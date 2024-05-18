@@ -1,15 +1,14 @@
 package com.block_chain.KLTN.domain.order;
 
+import com.block_chain.KLTN.domain.transaction.TransactionStatus;
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.block_chain.KLTN.domain.transaction.TransactionStatus;
-
-import lombok.Getter;
-
 @Getter
 public enum OrderStatus {
-    DRAFT, CREATED, RECEIVED, TRANSPORTING, TRANSPORTED, DELIVERING, DELIVERED, CANCELED, REFUNDED;
+    DRAFT, CREATED, RECEIVED, TRANSPORTING, TRANSPORTED, DELIVERING, DELIVERED, CANCELED, REFUNDED, CANCELLED;
 
     private TransactionStatus status;
     public static Map<TransactionStatus, OrderStatus> transactionStatusMap = new HashMap<TransactionStatus, OrderStatus>() {{
