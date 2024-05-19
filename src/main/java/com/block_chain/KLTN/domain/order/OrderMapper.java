@@ -7,5 +7,8 @@ import org.mapstruct.Mapping;
 public interface OrderMapper {
     @Mapping(source = "orderItems", target = "items")
     OrderResponse toResponse(OrderEntity order);
+
+    @Mapping(target = "sender", source = "senderObject")
+    @Mapping(target = "receiver", source = "receiverObject")
     OrderDetailResponse toDetailResponse(OrderEntity order);
 }
