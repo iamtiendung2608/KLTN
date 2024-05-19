@@ -1,11 +1,13 @@
 package com.block_chain.KLTN.domain.transaction;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/transaction")
@@ -15,18 +17,8 @@ public class TransactionController {
     private final TransactionQueryService transactionQueryService;
     private final TransactionService transactionService;
 
-    @GetMapping("")
-    public Page<TransactionResponse> searchTransaction(TransactionSearchRequest request, Pageable pageable) {
-        return transactionQueryService.searchTransaction(request, pageable);
-    }
-
-    @GetMapping("/{id}")
-    public TransactionDetailResponse getTransaction(@PathVariable("id") Long id) {
-        return transactionQueryService.getTransactionDetail(id);
-    }
-
-    @PostMapping("")
-    public CreateTransactionResponse createTransaction(@Valid @RequestBody CreateTransactionRequest request) {
-        return transactionService.createTransaction(request);
+    @GetMapping("/{orderId}")
+    public ResponseEntity<List<TransactionResponse>> getTransaction(@PathVariable("orderId") Long orderId) {
+        return ResponseEntity.ok(transactionQueryService.getTransaction(orderId));
     }
 }

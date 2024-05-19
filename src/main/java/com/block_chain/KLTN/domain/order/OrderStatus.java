@@ -17,7 +17,7 @@ public enum OrderStatus {
         put(TransactionStatus.TRANSPORTING, TRANSPORTING);
         put(TransactionStatus.TRANSPORTED, TRANSPORTED);
         put(TransactionStatus.DELIVERING, DELIVERING);
-        put(TransactionStatus.DELIVERIED, DELIVERED);
+        put(TransactionStatus.DELIVERED, DELIVERED);
     }};
     
     public static OrderStatus get(TransactionStatus status){

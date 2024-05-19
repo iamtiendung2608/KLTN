@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DefaultTransactionQueryService implements TransactionQueryService {
@@ -22,5 +24,11 @@ public class DefaultTransactionQueryService implements TransactionQueryService {
     @Override
     public Page<TransactionResponse> searchTransaction(TransactionSearchRequest request, Pageable pageable) {
         return transactionRepository.findAll(request.toPredicate(), pageable).map(transactionMapper::toResponse);
+    }
+
+    @Override
+    public List<TransactionResponse> getTransaction(Long orderId) {
+        return transactionRepository.findAllByOrderId(orderId)
+                .stream().map(transactionMapper::toResponse).toList();
     }
 }

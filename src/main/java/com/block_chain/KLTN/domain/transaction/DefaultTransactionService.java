@@ -51,7 +51,7 @@ public class DefaultTransactionService implements TransactionService {
             case RECEIVED:
             case TRANSPORTED:
             case DELIVERING:
-            case DELIVERIED:
+            case DELIVERED:
             case TRANSPORTING:{
                 PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));

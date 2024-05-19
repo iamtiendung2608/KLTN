@@ -9,6 +9,6 @@ public enum TransactionStatus {
     TRANSPORTING,
     TRANSPORTED,
     DELIVERING,
-    DELIVERIED;
+    DELIVERED;
     // To-do: some status for exception
 }

@@ -115,7 +115,7 @@ public class DefaultTransactionEvent implements TransactionEventService {
                 receiverName = "END_USER";
                 break;
             }
-            case DELIVERIED:{
+            case DELIVERED:{
                 // sender: postOffice - receiver: END_USER
                 PostOfficesEntity postOffices = postOfficesRepository.findById(newTransaction.getPostOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
