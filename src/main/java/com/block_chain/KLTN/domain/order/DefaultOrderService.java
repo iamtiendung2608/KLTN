@@ -65,7 +65,7 @@ public class DefaultOrderService implements OrderService{
             .stream().reduce(0, (sub, item) -> sub + item.price() * item.quantity(), Integer::sum); 
         Float totalWeight = orderReq.items()
             .stream().reduce(0f, (sub, item) -> sub + item.weight() * item.quantity(), Float::sum);
-        Float feepaid = caculateFeePaid(totalWeight, orderReq.deliveryType());
+        Float feepaid = calculateFeePaid(totalWeight, orderReq.deliveryType());
         Float totalPrice = subTotal + feepaid;
 
         OffsetDateTime estimatedDeliveryAt = 
@@ -141,7 +141,7 @@ public class DefaultOrderService implements OrderService{
      * Reference: https://viettelpost.com.vn/dich_vu/chuyen-phat-tai-lieu/
      * base on Nội tỉnh
      */
-    private Float caculateFeePaid(float totalWeight, DeliveryType type){
+    private Float calculateFeePaid(float totalWeight, DeliveryType type){
         float base_fee = (type == DeliveryType.NORMAL ? 11000f : 15000f);
 
         if (totalWeight > 500){
