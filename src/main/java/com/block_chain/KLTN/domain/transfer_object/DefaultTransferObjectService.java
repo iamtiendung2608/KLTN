@@ -9,8 +9,6 @@ import com.block_chain.KLTN.exception.ErrorMessage;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
