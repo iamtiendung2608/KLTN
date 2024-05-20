@@ -21,11 +21,9 @@ public class DefaultOrderQueryService implements OrderQueryService{
     private final UserRepository userRepository;
 
     @Override
-    public OrderResponse getOrder(Long id) {
-        OrderEntity entity = orderRepository.findById(id)
+    public OrderResponse getOrder(Long id) {        
+        return orderRepository.findById(id).map(orderMapper::toResponse)
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
-        
-        return orderMapper.toResponse(entity);
     }
 
     @Override
@@ -38,8 +36,6 @@ public class DefaultOrderQueryService implements OrderQueryService{
 
     @Override
     public Optional<OrderDetailResponse> getOrderDetail(Long id) {
-        Optional<OrderDetailResponse> response = orderRepository.findById(id).map(orderMapper::toDetailResponse);
-        
-        return response;
+        return orderRepository.findById(id).map(orderMapper::toDetailResponse);
     }
 }
