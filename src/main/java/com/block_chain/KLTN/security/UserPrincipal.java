@@ -28,6 +28,7 @@ public class UserPrincipal implements UserDetails {
     private UserStatus status;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
+    private Long organizationId;
 
     public UserPrincipal(Long id, String email, String password, UserStatus status, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
