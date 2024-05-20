@@ -32,6 +32,12 @@ public class OrderEntity extends AbstractEntity {
     @Column(name = "total_price")
     private float totalPrice;
 
+    @Column(name = "sub_total")
+    private float subTotal;
+
+    @Column(name = "fee_paid")
+    private float feePaid;
+
     @Column(name = "delivery_at")
     private OffsetDateTime deliveryAt;
 

@@ -61,16 +61,22 @@ public class DefaultOrderService implements OrderService{
         }
 
         // Handling Order Entity
-        int totalPrice = orderReq.items()
-            .stream().reduce(0, (subTotal, item) -> subTotal + item.price() * item.quantity(), Integer::sum); 
+        int subTotal = orderReq.items()
+            .stream().reduce(0, (sub, item) -> sub + item.price() * item.quantity(), Integer::sum); 
         Float totalWeight = orderReq.items()
-            .stream().reduce(0f, (subTotal, item) -> subTotal + item.weight() * item.quantity(), Float::sum);
-        OffsetDateTime estimatedDeliveryAt = OffsetDateTime.now().plusDays(7L);
+            .stream().reduce(0f, (sub, item) -> sub + item.weight() * item.quantity(), Float::sum);
+        Float feepaid = caculateFeePaid(totalWeight, orderReq.deliveryType());
+        Float totalPrice = subTotal + feepaid;
+
+        OffsetDateTime estimatedDeliveryAt = 
+            OffsetDateTime.now().plusDays(orderReq.deliveryType() == DeliveryType.NORMAL ? 7L : 4L);
         
         OrderEntity orderEntity = OrderEntity.builder()
             .status(orderReq.status())
-            .totalPrice(totalPrice)
             .totalWeight(totalWeight)
+            .subTotal(subTotal)
+            .feePaid(feepaid)
+            .totalPrice(totalPrice)
             .estimatedDeliveryAt(estimatedDeliveryAt)
             .deliveryType(orderReq.deliveryType())
             .note(orderReq.note())
@@ -130,4 +136,24 @@ public class DefaultOrderService implements OrderService{
                     id, 
                     null));
     }
+
+    /*
+     * Reference: https://viettelpost.com.vn/dich_vu/chuyen-phat-tai-lieu/
+     * base on Nội tỉnh
+     */
+    private Float caculateFeePaid(float totalWeight, DeliveryType type){
+        float base_fee = (type == DeliveryType.NORMAL ? 11000f : 15000f);
+
+        if (totalWeight > 500){
+            // Additional 10k for obj over 500g
+            base_fee += 10000; 
+        }
+        if (totalWeight > 2000) {
+            // Additional 2k for each 0.5kg over 2000g
+            base_fee += (Math.ceil(totalWeight - 2000) / 500)*2000;
+        }
+
+        return base_fee;
+
+    }   
 }
