@@ -44,6 +44,7 @@ public class TokenProvider {
                 .claim("role", roles)
                 .claim("email", userPrincipal.getEmail())
                 .claim("status", userPrincipal.getStatus().name())
+                .claim("organizationId", user.getOrganizationId())
                 .claim("authenticationObject", "User")
                 .setIssuedAt(Date.from(now))
                 .setExpiration(expiryDate)
@@ -60,6 +61,7 @@ public class TokenProvider {
         return new UserPrincipal().setId(claims.get("id", Long.class))
                 .setEmail(claims.get("email", String.class))
                 .setStatus(claims.get("status", String.class))
+                .setOrganizationId(claims.get("organizationId", Long.class))
                 .setAuthorities(claims.get("role", Collection.class));
     }
 

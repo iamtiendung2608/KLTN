@@ -11,4 +11,6 @@ public class ApiConstant {
     public static final String FORGOT_PASSWORD = "/forgot-password";
     public static final String RESET_PASSWORD = "/reset-password";
     public static final String RESEND_VERIFICATION = "/resend-verification";
+
+    public static final String ADMIN = "/admin";
 }

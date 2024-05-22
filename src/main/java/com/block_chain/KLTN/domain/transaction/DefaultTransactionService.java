@@ -79,7 +79,6 @@ public class DefaultTransactionService implements TransactionService {
         
         transaction = transactionRepository.save(transaction);
         return new CreateTransactionResponse(transaction.getId());
-        
     }
 
 
