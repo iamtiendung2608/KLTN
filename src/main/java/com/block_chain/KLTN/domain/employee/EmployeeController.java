@@ -13,16 +13,11 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/employee")
-@PreAuthorize("hasRole('ROLE_super_admin') or hasRole('ROLE_employee')")
+@PreAuthorize("hasAuthority('super_admin') or hasAuthority('employee')")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
     private final EmployeeQueryService employeeQueryService;
-
-    @PostMapping("")
-    public CreateEmployeeResponse create(@Valid @RequestBody EmployeeRequest request) {
-        return employeeService.create(request);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@PathVariable("id") Long id, @Valid @RequestBody EmployeeRequest request) {

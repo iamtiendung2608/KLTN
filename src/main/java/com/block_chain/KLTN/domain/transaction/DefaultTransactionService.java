@@ -34,19 +34,32 @@ public class DefaultTransactionService implements TransactionService {
     @Override
     @Transactional
     public CreateTransactionResponse createTransaction(CreateTransactionRequest request) {
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
+            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         TransactionEntity oldTransaction = transactionRepository.findLastTransaction(request.orderId());
-        
         OrderEntity order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
-
         TransactionEntity transaction = TransactionEntity.builder()
                     .status(request.status())
                     .note(request.note())
                     .orderId(request.orderId())
                     .order(order)
                     .build();
-
         PostOfficesEntity postOffice = null;
+
+        if (Objects.nonNull(order.getEmployeeId()) && 
+            (!order.getEmployeeId().equals(employee.getId()))) {
+            throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "You dont have permission to update this order");
+        }
+
+        if (Objects.nonNull(oldTransaction)) {
+            if (oldTransaction.getStatus().equals(TransactionStatus.DELIVERED) || 
+                oldTransaction.getStatus().getStep() > request.status().getStep()) {
+                throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
+            }
+        }
+
         if (request.postOfficeId() != null){
             postOffice = postOfficesRepository.findById(request.postOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
@@ -89,10 +102,6 @@ public class DefaultTransactionService implements TransactionService {
             }
             case DELIVERING:
             case TRANSPORTING:{
-                UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
-                    .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
-        
                 transaction.setPostOffice(postOffice);
                 transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(employee);
@@ -114,7 +123,6 @@ public class DefaultTransactionService implements TransactionService {
         
         orderRepository.save(order);
         transaction = transactionRepository.save(transaction);
-
         applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
         return new CreateTransactionResponse(transaction.getId());
     }

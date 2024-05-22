@@ -72,11 +72,11 @@ public class OrderEntity extends AbstractEntity {
     private Long receiverObjectId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_object_id", referencedColumnName = "id", insertable = false, updatable = true)
+    @JoinColumn(name = "sender_object_id", referencedColumnName = "id", insertable = false, updatable = false)
     private TransferObjectEntity senderObject;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_object_id", referencedColumnName = "id", insertable = false, updatable = true)
+    @JoinColumn(name = "receiver_object_id", referencedColumnName = "id", insertable = false, updatable = false)
     private TransferObjectEntity receiverObject;
 
     @Column(name = "employee_id")
