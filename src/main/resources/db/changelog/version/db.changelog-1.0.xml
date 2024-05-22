@@ -399,4 +399,14 @@
       <column name="fee_paid" type="real"/>
     </addColumn>
   </changeSet>
+
+  <changeSet id="1.1.5" author="toan.nguyen">
+    <addColumn tableName="orders">
+      <column name="employee_id" type="int">
+        <constraints referencedTableName="employee" 
+          referencedColumnNames="id" 
+          foreignKeyName="order_employee_fk"/>
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

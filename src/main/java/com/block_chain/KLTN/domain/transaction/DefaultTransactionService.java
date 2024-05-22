@@ -44,40 +44,78 @@ public class DefaultTransactionService implements TransactionService {
                     .note(request.note())
                     .orderId(request.orderId())
                     .order(order)
-                    .postOfficeId(request.postOfficeId())
                     .build();
 
-        switch (transaction.getStatus()) {
-            case RECEIVED:
-            case TRANSPORTED:
-            case DELIVERING:
-            case DELIVERED:
-            case TRANSPORTING:{
-                PostOfficesEntity postOffice = postOfficesRepository.findById(request.postOfficeId())
+        PostOfficesEntity postOffice = null;
+        if (request.postOfficeId() != null){
+            postOffice = postOfficesRepository.findById(request.postOfficeId())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "PostOffice"));
+        }
+
+        switch (transaction.getStatus()) {
+            case RECEIVED:{
+                transaction.setPostOffice(postOffice);
+                transaction.setPostOfficeId(postOffice.getId());
+                transaction.setEmployee(null);
+                transaction.setEmployeeId(null);
+
+                order.getSenderObject().setPostOffices(postOffice);
+                order.getSenderObject().setPostOfficeId(postOffice.getId());
+                order.setEmployee(null);
+                order.setEmployeeId(null);
+                break;
+            }
+            case DELIVERED:{
+                transaction.setPostOffice(postOffice);
+                transaction.setPostOfficeId(postOffice.getId());
+                transaction.setEmployee(null);
+                transaction.setEmployeeId(null);
+
+                order.getReceiverObject().setPostOffices(postOffice);
+                order.getReceiverObject().setPostOfficeId(postOffice.getId());
+                order.setEmployee(null);
+                order.setEmployeeId(null);
+                break;
+            }
+            case TRANSPORTED:{
+                transaction.setPostOffice(postOffice);
+                transaction.setPostOfficeId(postOffice.getId());
+                transaction.setEmployee(null);
+                transaction.setEmployeeId(null);
+
+                order.setEmployee(null);
+                order.setEmployeeId(null);
+                break;
+            }
+            case DELIVERING:
+            case TRANSPORTING:{
                 UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
                     .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         
                 transaction.setPostOffice(postOffice);
+                transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(employee);
                 transaction.setEmployeeId(employee.getId());
-                applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
+
+                order.setEmployee(employee);
+                order.setEmployeeId(employee.getId());
                 break;
             }
-                
             case CREATED:{
                 if (Objects.nonNull(oldTransaction)) {
                     throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Đơn hàng đã được gửi đến kho hàng");
                 }
-                applicationEventPublisher.publishEvent(new CreateTransactionEvent(null, transaction));
                 break;
             }
             default:
                 throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Transaction Status");
         }
         
+        orderRepository.save(order);
         transaction = transactionRepository.save(transaction);
+
+        applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
         return new CreateTransactionResponse(transaction.getId());
     }
 

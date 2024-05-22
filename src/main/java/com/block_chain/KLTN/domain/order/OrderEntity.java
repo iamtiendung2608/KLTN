@@ -1,6 +1,7 @@
 package com.block_chain.KLTN.domain.order;
 
 import com.block_chain.KLTN.common.AbstractEntity;
+import com.block_chain.KLTN.domain.employee.EmployeeEntity;
 import com.block_chain.KLTN.domain.order.order_item.OrderItemEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.transfer_object.TransferObjectEntity;
@@ -71,10 +72,17 @@ public class OrderEntity extends AbstractEntity {
     private Long receiverObjectId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_object_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "sender_object_id", referencedColumnName = "id", insertable = false, updatable = true)
     private TransferObjectEntity senderObject;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_object_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "receiver_object_id", referencedColumnName = "id", insertable = false, updatable = true)
     private TransferObjectEntity receiverObject;
+
+    @Column(name = "employee_id")
+    private Long employeeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private EmployeeEntity employee;
 }
