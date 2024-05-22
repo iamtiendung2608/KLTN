@@ -23,6 +23,9 @@ public class UserEntity {
     private String email;
     private String password;
 
+    @Column(name = "full_name")
+    private String fullName;
+
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 

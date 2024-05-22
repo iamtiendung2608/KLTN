@@ -7,4 +7,6 @@ import org.mapstruct.Mapping;
 public interface OrganizationMapper {
     @Mapping(target = "id", ignore = true)
     OrganizationEntity toEntity(CreateOrganizationRequest request);
+
+    OrganizationResponse toResponse(OrganizationEntity organization);
 }
