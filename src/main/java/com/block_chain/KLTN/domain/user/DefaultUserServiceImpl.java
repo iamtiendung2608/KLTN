@@ -27,6 +27,7 @@ public class DefaultUserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final VerifyService verifyService;
     private final WalletQueryService walletQueryService;
+    private final UserMapper userMapper;
 
     @Transactional
     @Override
@@ -42,6 +43,7 @@ public class DefaultUserServiceImpl implements UserService {
         
         UserEntity user = UserEntity.builder()
                 .email(request.email())
+                .fullName(request.fullName())
                 .password(passwordEncoder.encode(request.password()))
                 .status(UserStatus.INACTIVE)
                 .build();
@@ -70,6 +72,7 @@ public class DefaultUserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public String getUserRole(String email) {
         Optional<UserEntity> optUser = userRepository.findByEmail(email);
         if (optUser.isEmpty()) {
@@ -78,5 +81,9 @@ public class DefaultUserServiceImpl implements UserService {
         return optUser.get().getUserRoles().stream().findFirst().get().getRoleCode();
     }
 
-    
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserResponse> getUser(long id) {
+        return userRepository.findById(id).map(userMapper::toResponse);
+    }
 }

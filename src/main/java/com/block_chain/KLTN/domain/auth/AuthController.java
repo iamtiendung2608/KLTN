@@ -3,6 +3,7 @@ package com.block_chain.KLTN.domain.auth;
 import com.block_chain.KLTN.domain.organization.CreateOrganizationRequest;
 import com.block_chain.KLTN.domain.organization.OrganizationService;
 import com.block_chain.KLTN.domain.user.ChangePasswordRequest;
+import com.block_chain.KLTN.domain.user.UserResponse;
 import com.block_chain.KLTN.domain.user.UserService;
 import com.block_chain.KLTN.domain.verification.VerifyRequest;
 import com.block_chain.KLTN.domain.verification.VerifyService;
@@ -16,10 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -66,5 +64,10 @@ public class AuthController {
     public ResponseEntity<?> confirmSignUp(@Valid @RequestBody CreateOrganizationRequest request) {
         organizationService.createOrganization(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getUser(@Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user) {
+        return userService.getUser(user.getId()).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }

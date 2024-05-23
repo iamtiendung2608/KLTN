@@ -1,14 +1,5 @@
 package com.block_chain.KLTN.domain.order;
 
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.block_chain.KLTN.domain.item.ItemEntity;
 import com.block_chain.KLTN.domain.item.ItemMapper;
 import com.block_chain.KLTN.domain.item.ItemRepository;
@@ -26,8 +17,15 @@ import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -144,16 +142,14 @@ public class DefaultOrderService implements OrderService{
     private Float calculateFeePaid(float totalWeight, DeliveryType type){
         float base_fee = (type == DeliveryType.NORMAL ? 11000f : 15000f);
 
-        if (totalWeight > 500){
+        if (totalWeight > 500) {
             // Additional 10k for obj over 500g
             base_fee += 10000; 
         }
         if (totalWeight > 2000) {
             // Additional 2k for each 0.5kg over 2000g
-            base_fee += (Math.ceil(totalWeight - 2000) / 500)*2000;
+            base_fee += (float) ((Math.ceil(totalWeight - 2000) / 500) * 2000);
         }
-
         return base_fee;
-
-    }   
+    }
 }

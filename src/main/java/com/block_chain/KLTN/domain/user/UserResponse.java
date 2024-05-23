@@ -4,7 +4,8 @@ public record UserResponse(
     Long id,
     String email,
     Long organizationId,
-    UserStatus status
+    UserStatus status,
+    String fullName
 ) {
     
 }
