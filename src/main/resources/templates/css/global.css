@@ -1,0 +1,35 @@
+.container{
+    font-family: Helvetica,Arial,sans-serif;
+    min-width:1000px;
+    overflow:auto;
+    line-height:2
+}
+
+.divider{
+    border-bottom:1px solid #eaa
+}
+
+.contact{
+    float:right;
+    padding:8px 0;
+    color:#aaa;
+    font-size:0.8em;
+    line-height:1;
+    font-weight:300
+}
+
+.dear_line{
+    font-size:1.4em;
+    color: #00466a;
+    text-decoration:none;
+    font-weight:600
+}
+
+.info_container{
+    background: #00466a;
+    margin: 0 auto;
+    width: max-content;
+    padding: 0 10px;
+    color: #fff;
+    border-radius: 10px;
+}

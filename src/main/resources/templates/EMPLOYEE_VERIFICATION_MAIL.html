@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Verification</title>
+    <link rel="stylesheet" href="css/global.css"/>
+</head>
+<body>
+<div class="container">
+    <div style="margin:50px auto;width:70%;padding:20px 0">
+        <div class="divider" >
+            <p class="dear_line">Dear, <a href=""  th:text="${name}"></a></p> 
+        </div>
+        <p style="font-size:1.1em">Hi,</p>
+        <p>Thank you for joining us. You now have access to our platform as an employee. We have created an account for you. Please do not share your account and password.</p>
+        <h2 class="info_container">
+            Email: <a style="color: #fff" th:text="${email}"></a>
+        </h2>
+        <h2 class="info_container">
+            Password: <a style="color: #fff" th:text="${password}"></a>         
+        </h2>
+        <p style="font-size:0.9em;">Regards,<br />Supply-Blockchain Team</p>
+        <hr class="divider" />
+        <div class="contact">
+            <p>184 D Street, District 2</p>
+            <p>Ho Chi Minh, Vietnam</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

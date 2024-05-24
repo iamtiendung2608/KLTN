@@ -3,6 +3,7 @@ package com.block_chain.KLTN.domain.employee;
 import com.block_chain.KLTN.common.AppConstant;
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagRepository;
+import com.block_chain.KLTN.domain.mail.MailService;
 import com.block_chain.KLTN.domain.postOffices.PostOfficesEntity;
 import com.block_chain.KLTN.domain.postOffices.PostOfficesRepository;
 import com.block_chain.KLTN.domain.user.UserEntity;
@@ -10,10 +11,15 @@ import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.domain.user.UserStatus;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
+import com.block_chain.KLTN.domain.verification.VerifyEntity;
+import com.block_chain.KLTN.event.CustomSpringEventPublisher;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
+import com.block_chain.KLTN.helper.Mail;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +39,7 @@ public class DefaultEmployeeService implements EmployeeService {
 
     private final PasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
+    private final MailService mailService;
 
     @Override
     @Transactional
@@ -74,7 +81,7 @@ public class DefaultEmployeeService implements EmployeeService {
         user.addRole(role);
         employeeRepository.save(employee);
         userRepository.save(user);
-
+        mailService.sendEmployeeVerifyMail(employee, request.password());
         return new CreateEmployeeResponse(employee.getId());
     }
 
