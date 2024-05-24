@@ -24,9 +24,4 @@ public class PostOfficesController {
     public Page<PostOfficesResponse> searchPostOffices(PostOfficesSearchRequest request, Pageable pageable) {
         return postOfficesQueryService.searchPostOffices(request, pageable);
     }
-
-    @GetMapping("/check")
-    public boolean checkWallet() {
-        return postOfficesService.checkWallet();
-    }
 }
