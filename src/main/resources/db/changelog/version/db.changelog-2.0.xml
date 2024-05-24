@@ -10,4 +10,15 @@
             <column name="full_name" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="2.0.2" author="toan.nguyen">
+        <addColumn tableName="employee">
+            <column name="create_at" type="timestamp"/>
+            <column name="modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="2.0.3" author="toan.nguyen">
+        <renameColumn tableName="employee" oldColumnName="create_at" newColumnName="created_at" />
+    </changeSet>
 </databaseChangeLog>

@@ -10,7 +10,6 @@ import com.block_chain.KLTN.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -60,4 +59,10 @@ public class DefaultOrderQueryService implements OrderQueryService{
     public Optional<OrderDetailResponse> getOrderDetail(Long id) {
         return orderRepository.findById(id).map(orderMapper::toDetailResponse);
     }
+
+    @Override
+    public Page<OrderResponse> searchAllOrder(OrderSearchRequest request, Pageable pageable) {
+        return orderRepository.findAll(request.allOrder(), pageable).map(orderMapper::toResponse);
+    }
+    
 }

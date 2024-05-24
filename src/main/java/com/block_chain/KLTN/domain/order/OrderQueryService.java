@@ -11,4 +11,5 @@ public interface OrderQueryService {
     Page<OrderResponse> searchOrder(OrderSearchRequest request, Pageable pageable);
     Page<OrderResponse> searchOrderAssigned(OrderSearchRequest request, Pageable pageable);
     Optional<OrderDetailResponse> getOrderDetail(Long id);
+    Page<OrderResponse> searchAllOrder(OrderSearchRequest request, Pageable pageable);
 }

@@ -20,6 +20,7 @@ public record OrderSearchRequest(
 
     public Predicate employeeToPredicte(Long employeeId) {
         QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
+        
         return new OptionalBooleanBuilder(qOrderEntity.employeeId.isNull())
             .notNullOr(qOrderEntity.employee.id::eq, employeeId)
             .notNullAnd(qOrderEntity.status::eq, status)
@@ -35,5 +36,14 @@ public record OrderSearchRequest(
                 .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
                 .notNullAnd(qOrderEntity.paidType::eq, paidType)
                 .build();
+    }
+
+    public Predicate allOrder(){
+        QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
+        return new OptionalBooleanBuilder(qOrderEntity.id.gt(0))
+            .notNullAnd(qOrderEntity.status::eq, status)
+            .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
+            .notNullAnd(qOrderEntity.paidType::eq, paidType)
+            .build();
     }
 }

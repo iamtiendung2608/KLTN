@@ -41,6 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.RESEND_VERIFICATION),
             new AntPathRequestMatcher(ApiConstant.AUTH + ApiConstant.RESET_PASSWORD));
 
+    private static final RequestMatcher ADMIN_URLS = new OrRequestMatcher(
+            new AntPathRequestMatcher(ApiConstant.ADMIN + "/**")
+    );
+
     private TokenAuthenticationFilter tokenAuthenticationFilter;
     private CustomUserDetailService customUserDetailService;
     private UserRepository userRepository;
@@ -56,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
                 .authorizeRequests()
                 .requestMatchers(PUBLIC_URLS).permitAll()
+                .requestMatchers(ADMIN_URLS).hasRole("super_admin")
                 .anyRequest().authenticated().and()
                 .formLogin().disable()
                 .httpBasic().disable();
