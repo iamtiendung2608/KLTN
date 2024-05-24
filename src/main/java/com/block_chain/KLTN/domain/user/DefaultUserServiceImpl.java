@@ -6,7 +6,6 @@ import com.block_chain.KLTN.domain.auth.SignUpResponse;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import com.block_chain.KLTN.domain.user.role.RoleRepository;
 import com.block_chain.KLTN.domain.verification.VerifyService;
-import com.block_chain.KLTN.domain.wallet.WalletQueryService;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.security.UserPrincipal;
@@ -26,7 +25,6 @@ public class DefaultUserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final VerifyService verifyService;
-    private final WalletQueryService walletQueryService;
     private final UserMapper userMapper;
 
     @Transactional

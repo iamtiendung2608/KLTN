@@ -9,6 +9,8 @@ public record PostOfficesRequest(
     @NotEmpty String sponsor,
     @NotEmpty String code,
     @NotEmpty String sponsorPhone,
+    @NotEmpty String longitude,
+    @NotEmpty String latitude,
     @NotEmpty Long locationTagId
 ) {
     

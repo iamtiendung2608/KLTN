@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PostOfficesController {
     private final PostOfficesQueryService postOfficesQueryService;
-    private final PostOfficesService postOfficesService;
 
     @GetMapping("/{id}")
     public PostOfficesResponse getPostOffices(@PathVariable("id") Long id) {
@@ -23,10 +22,5 @@ public class PostOfficesController {
     @GetMapping("")
     public Page<PostOfficesResponse> searchPostOffices(PostOfficesSearchRequest request, Pageable pageable) {
         return postOfficesQueryService.searchPostOffices(request, pageable);
-    }
-
-    @GetMapping("/check")
-    public boolean checkWallet() {
-        return postOfficesService.checkWallet();
     }
 }

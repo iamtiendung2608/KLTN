@@ -7,6 +7,8 @@ public record UpdatePostOfficesRequest(
     @NotEmpty String phone,
     @NotEmpty String address,
     @NotEmpty String sponsor,
+    @NotEmpty String longitude,
+    @NotEmpty String latitude,
     @NotEmpty String code,
     @NotEmpty String sponsorPhone
 ) {

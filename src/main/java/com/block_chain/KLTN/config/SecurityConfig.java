@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint()).and()
                 .authorizeRequests()
                 .requestMatchers(PUBLIC_URLS).permitAll()
-                .requestMatchers(ADMIN_URLS).hasRole("super_admin")
+                .requestMatchers(ADMIN_URLS).hasAnyAuthority("super_admin")
                 .anyRequest().authenticated().and()
                 .formLogin().disable()
                 .httpBasic().disable();

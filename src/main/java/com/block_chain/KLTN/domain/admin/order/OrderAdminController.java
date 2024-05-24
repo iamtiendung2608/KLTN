@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class OrderAdminController {
     private final OrderQueryService orderQueryService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public Page<OrderResponse> getMethodName(@Valid @RequestBody OrderSearchRequest request, Pageable pageable) {
         return orderQueryService.searchAllOrder(request, pageable);
     }
