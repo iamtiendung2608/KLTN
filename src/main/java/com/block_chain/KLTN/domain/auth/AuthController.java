@@ -3,6 +3,7 @@ package com.block_chain.KLTN.domain.auth;
 import com.block_chain.KLTN.domain.organization.CreateOrganizationRequest;
 import com.block_chain.KLTN.domain.organization.OrganizationService;
 import com.block_chain.KLTN.domain.user.ChangePasswordRequest;
+import com.block_chain.KLTN.domain.user.UpdateUserRequest;
 import com.block_chain.KLTN.domain.user.UserResponse;
 import com.block_chain.KLTN.domain.user.UserService;
 import com.block_chain.KLTN.domain.verification.VerifyRequest;
@@ -69,5 +70,11 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getUser(@Parameter(hidden = true) @AuthenticationPrincipal UserPrincipal user) {
         return userService.getUser(user.getId()).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/me/{id}")
+    public ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserRequest request) {
+        userService.updateUser(id, request);
+        return ResponseEntity.ok().build();
     }
 }

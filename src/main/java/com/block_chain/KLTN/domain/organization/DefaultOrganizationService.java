@@ -6,15 +6,12 @@ import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
 import com.block_chain.KLTN.domain.wallet.WalletType;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,5 +41,19 @@ public class DefaultOrganizationService implements OrganizationService {
         applicationEventPublisher.publishEvent(new CreateWalletEvent(organization.getId(), WalletType.ORGANIZATION));
         user.setOrganizationId(organization.getId());
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void editOrganization(Long id, UpdateOrganizationRequest request) {
+        OrganizationEntity organization = organizationRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Organization"));
+
+        organization.setName(request.name());
+        organization.setDescription(request.description());
+        organization.setCategory(request.category());
+        organization.setScope(request.scope());
+        organization.setScale(request.scale());
+        organizationRepository.save(organization);
     }
 }
