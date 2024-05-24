@@ -86,4 +86,16 @@ public class DefaultUserServiceImpl implements UserService {
     public Optional<UserResponse> getUser(long id) {
         return userRepository.findById(id).map(userMapper::toResponse);
     }
+
+    @Override
+    @Transactional
+    public void updateUser(Long id, UpdateUserRequest request) {
+        Optional<UserEntity> optUser = userRepository.findById(id);
+        if (optUser.isEmpty()) {
+            throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User");
+        }
+        UserEntity user = optUser.get();
+        user.setFullName(request.fullName());
+        userRepository.save(user);
+    }
 }

@@ -15,4 +15,6 @@ public interface UserService {
 
     String getUserRole(String email);
     Optional<UserResponse> getUser(long id);
+
+    void updateUser(Long id, UpdateUserRequest request);
 }
