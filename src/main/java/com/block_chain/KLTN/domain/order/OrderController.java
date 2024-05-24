@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,6 +20,12 @@ public class OrderController {
     @GetMapping("")
     public Page<OrderResponse> SearchOrder(OrderSearchRequest request, Pageable pageable) {
         return orderQueryService.searchOrder(request, pageable); //orderQueryService.searchOrder();
+    }
+
+    @GetMapping("/search-assigned")
+    @PreAuthorize("hasAuthority('super_admin') or hasAuthority('employee')")
+    public Page<OrderResponse> searchOrderAssigned(OrderSearchRequest request, Pageable pageable) {
+        return orderQueryService.searchOrderAssigned(request, pageable);
     }
     
     @PostMapping("")

@@ -1,12 +1,16 @@
 package com.block_chain.KLTN.domain.order;
 
+import com.block_chain.KLTN.domain.employee.EmployeeEntity;
+import com.block_chain.KLTN.domain.employee.EmployeeRepository;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
+import com.block_chain.KLTN.domain.user.UserService;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,9 @@ public class DefaultOrderQueryService implements OrderQueryService{
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final UserRepository userRepository;
+    private final EmployeeRepository employeeRepository;
+
+    private final UserService userService;
 
     @Override
     public OrderResponse getOrder(Long id) {        
@@ -31,7 +38,22 @@ public class DefaultOrderQueryService implements OrderQueryService{
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByEmail(userDetail.getUsername())
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
+
+        if (userService.getUserRole(userDetail.getUsername()).equals("employee")) {
+            EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee email not found"));
+            return orderRepository.findAll(request.employeeToPredicte(employee.getId()), pageable).map(orderMapper::toResponse);
+        }
         return orderRepository.findAll(request.toPredicate(userEntity.getOrganizationId()), pageable).map(orderMapper::toResponse);
+    }
+
+    @Override
+    public Page<OrderResponse> searchOrderAssigned(OrderSearchRequest request, Pageable pageable) {
+        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
+            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee email not found"));
+        
+        return orderRepository.findAll(request.orderAssigned(employee.getId()), pageable).map(orderMapper::toResponse);
     }
 
     @Override

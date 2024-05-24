@@ -43,7 +43,6 @@ public class DefaultEmployeeService implements EmployeeService {
         List<PostOfficesEntity> postOfficesEntityList = postOfficesRepository.findAllById(
             request.postOfficeIds());
 
-        
         List<RoleEntity> roles = roleRepository.findAll();
         RoleEntity role = roles.stream()
             .filter(i -> AppConstant.Roles.EMPLOYEE.getRoleCode().equals(i.getRoleCode())).findFirst().get();
@@ -51,7 +50,6 @@ public class DefaultEmployeeService implements EmployeeService {
         if (postOfficesEntityList.size() != request.postOfficeIds().size()) {
             throw new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Post Office");
         }
-
 
         if (existUser.isPresent() || userRepository.existsByEmail(request.email())) {
             throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "User");

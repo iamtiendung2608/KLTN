@@ -17,4 +17,23 @@ public record OrderSearchRequest(
                 .notNullAnd(qOrderEntity.paidType::eq, paidType)
                 .build();
     }
+
+    public Predicate employeeToPredicte(Long employeeId) {
+        QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
+        return new OptionalBooleanBuilder(qOrderEntity.employeeId.isNull())
+            .notNullOr(qOrderEntity.employee.id::eq, employeeId)
+            .notNullAnd(qOrderEntity.status::eq, status)
+            .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
+            .notNullAnd(qOrderEntity.paidType::eq, paidType)
+            .build();
+    }
+
+    public Predicate orderAssigned(Long employeeId){
+        QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
+        return new OptionalBooleanBuilder(qOrderEntity.employee.id.eq(employeeId))
+                .notNullAnd(qOrderEntity.status::eq, status)
+                .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
+                .notNullAnd(qOrderEntity.paidType::eq, paidType)
+                .build();
+    }
 }
