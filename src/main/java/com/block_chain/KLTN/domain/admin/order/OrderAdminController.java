@@ -20,7 +20,7 @@ public class OrderAdminController {
     private final OrderQueryService orderQueryService;
 
     @GetMapping("")
-    public Page<OrderResponse> getMethodName(@Valid @RequestBody OrderSearchRequest request, Pageable pageable) {
+    public Page<OrderResponse> orderQueryAll(@Valid @RequestBody OrderSearchRequest request, Pageable pageable) {
         return orderQueryService.searchAllOrder(request, pageable);
     }
     

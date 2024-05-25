@@ -3,14 +3,15 @@ package com.block_chain.KLTN.domain.verification;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.block_chain.KLTN.common.properties.VerificationProperties;
 import com.block_chain.KLTN.domain.auth.ResendOTPRequest;
+import com.block_chain.KLTN.domain.mail.MailService;
 import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.domain.user.UserStatus;
-import com.block_chain.KLTN.event.CustomSpringEventPublisher;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
-import com.block_chain.KLTN.helper.Mail;
-import org.springframework.beans.factory.annotation.Value;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,29 +24,13 @@ import java.util.Random;
 
 
 @Service
+@RequiredArgsConstructor
 public class DefaultVerifyServiceImpl implements VerifyService {
     private final VerifyRepository verifyRepository;
     private final UserRepository userRepository;
     private final VerificationProperties verificationProperties;
-    private final Random random;
-    private static final String MAIL_SUBJECT = "[%s] (%s)";
-    private final CustomSpringEventPublisher customSpringEventPublisher;
-
-
-    @Value("${app.mail-from}")
-    private String mailFrom;
-    @Value("${app.email-prefix}")
-    private String emailPrefix;
-    private final String content = "Verify your account!";
-
-
-    public DefaultVerifyServiceImpl(VerifyRepository verifyRepository, UserRepository userRepository, VerificationProperties verificationProperties, CustomSpringEventPublisher customSpringEventPublisher) {
-        this.verifyRepository = verifyRepository;
-        this.userRepository = userRepository;
-        this.verificationProperties = verificationProperties;
-        this.random = new SecureRandom();
-        this.customSpringEventPublisher = customSpringEventPublisher;
-    }
+    private final Random random = new SecureRandom();;
+    private final MailService mailService;
 
     @Transactional
     @Override
@@ -90,7 +75,7 @@ public class DefaultVerifyServiceImpl implements VerifyService {
         verification.setCode(generateRandomCode());
         verification.setLastSendAt(OffsetDateTime.now());
         verifyRepository.save(verification);
-        this.sendMail(verification, verification.getUser());
+        mailService.sendVerifyMail(verification, verification.getUser());
         return ResponseEntity.ok().build();
     }
 
@@ -103,7 +88,7 @@ public class DefaultVerifyServiceImpl implements VerifyService {
                 .lastSendAt(OffsetDateTime.now())
                 .build();
         verifyRepository.save(verification);
-        this.sendMail(verification, user);
+        mailService.sendVerifyMail(verification, user);
     }
 
     private String generateRandomCode() {
@@ -114,15 +99,4 @@ public class DefaultVerifyServiceImpl implements VerifyService {
                 6
         );
     }
-
-    private void sendMail(VerifyEntity verify, UserEntity user) {
-        Mail mail = new Mail();
-        mail.setSubject(String.format(MAIL_SUBJECT, emailPrefix, content));
-        mail.setTemplate("VERIFICATION_MAIL");
-        mail.addProp("code", verify.getCode());
-        mail.setFrom(mailFrom);
-        mail.setTo(user.getEmail());
-        customSpringEventPublisher.publishCustomEvent(mail);
-    }
-
 }
