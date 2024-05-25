@@ -76,14 +76,11 @@ public class DefaultEmployeeService implements EmployeeService {
 
     @Override
     @Transactional
-    public void update(Long id, EmployeeRequest request) {
-        EmployeeEntity existEmployee = employeeRepository.findByEmail(request.email())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
-        LocationTagEntity locationTag = locationTagRepository.findById(request.locationTagId())
-                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "LocationTag"));
+    public void update(Long id, UpdateEmployeeRequest request) {
+        EmployeeEntity existEmployee = employeeRepository.findById(id)
+            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
 
         employeeMapper.updateEmployee(existEmployee, request);
-        existEmployee.setLocationTagId(locationTag.getId());
         employeeRepository.save(existEmployee);
     }
 

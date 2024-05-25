@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
-    void updateEmployee(@MappingTarget EmployeeEntity existEmployee, EmployeeRequest request);
+    void updateEmployee(@MappingTarget EmployeeEntity existEmployee, UpdateEmployeeRequest request);
 
     @Mapping(target = "id", source = "employee.id")
     @Mapping(target = "name", source = "employee.name")
