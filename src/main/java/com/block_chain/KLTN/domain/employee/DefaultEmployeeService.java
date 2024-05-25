@@ -36,6 +36,8 @@ public class DefaultEmployeeService implements EmployeeService {
     private final RoleRepository roleRepository;
     private final MailService mailService;
 
+    private final String defaultPassword = "1234567890";
+
     @Override
     @Transactional
     public CreateEmployeeResponse create(EmployeeRequest request) {
@@ -62,7 +64,7 @@ public class DefaultEmployeeService implements EmployeeService {
         employeeRepository.save(employee);
         UserEntity user = UserEntity.builder()
                 .email(request.email())
-                .password(passwordEncoder.encode(request.password()))
+                .password(passwordEncoder.encode(defaultPassword))
                 .status(UserStatus.ACTIVE)
                 .build();
                 
@@ -70,7 +72,7 @@ public class DefaultEmployeeService implements EmployeeService {
         employeeRepository.save(employee);
 
         userRepository.save(user);
-        mailService.sendEmployeeVerifyMail(employee, request.password());
+        mailService.sendEmployeeVerifyMail(employee, defaultPassword);
         return new CreateEmployeeResponse(employee.getId());
     }
 
