@@ -1,20 +1,17 @@
 package com.block_chain.KLTN.domain.postOffices;
 
-import java.util.List;
-
-import javax.transaction.Transactional;
-
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.stereotype.Service;
-
 import com.block_chain.KLTN.domain.location_tag.LocationTagEntity;
 import com.block_chain.KLTN.domain.location_tag.LocationTagRepository;
 import com.block_chain.KLTN.domain.wallet.CreateWalletEvent;
 import com.block_chain.KLTN.domain.wallet.WalletType;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -65,12 +62,6 @@ public class DefaultPostOfficesService implements PostOfficesService {
         PostOfficesEntity postOffice = postOfficesRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "post office"));
 
-        if (postOfficesRepository.existsByCode(request.code())) {
-            throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "code post office exists");
-        }
-        if (postOfficesRepository.existsByName(request.name())){
-            throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "name post office exists");
-        }
         postOfficesMapper.updateEntity(postOffice, request);
         postOfficesRepository.save(postOffice);
         return postOfficesMapper.toResponse(postOffice);
