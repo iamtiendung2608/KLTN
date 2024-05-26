@@ -34,7 +34,7 @@ public class EmployeeAdminController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") Long id, @RequestBody EmployeeRequest request) {
+    public ResponseEntity<Void> update(@PathVariable("id") Long id, @RequestBody UpdateEmployeeRequest request) {
         employeeService.update(id, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }

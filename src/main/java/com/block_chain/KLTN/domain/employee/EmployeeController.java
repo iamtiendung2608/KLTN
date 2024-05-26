@@ -20,7 +20,7 @@ public class EmployeeController {
     private final EmployeeQueryService employeeQueryService;
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") Long id, @Valid @RequestBody EmployeeRequest request) {
+    public ResponseEntity<Void> update(@PathVariable("id") Long id, @Valid @RequestBody UpdateEmployeeRequest request) {
         employeeService.update(id, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
