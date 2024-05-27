@@ -10,20 +10,22 @@ import com.block_chain.KLTN.util.AppUtil;
 
 public record OrderEvent (
     Long order_id,
-    String created_at,
-    String created_by,
+    String createdAt,
+    String createdBy,
     Float totalWeight,
     Float totalPrice,
+    Float subTotal,
+    Float feePaid,
     String note,
     OrderStatus status,
     List<ItemAttributeEvent> items
 ){
     public OrderEvent withItems(List<ItemAttributeEvent> items){
-        return new OrderEvent(order_id, created_at, created_by, totalWeight, totalPrice, note, status, items);
+        return new OrderEvent(order_id, createdAt, createdBy, totalWeight, totalPrice, feePaid, feePaid, note, status, items);
     }
 
-    public OrderEvent covertOffsetDateTime(OffsetDateTime created_at){
-        return new OrderEvent(order_id, AppUtil.dateFormatter(created_at), created_by, totalWeight, totalPrice, note, status, items);
+    public OrderEvent covertOffsetDateTime(OffsetDateTime createdAt){
+        return new OrderEvent(order_id, AppUtil.dateFormatter(createdAt), createdBy, totalWeight, totalPrice, subTotal, feePaid, note, status, items);
     }
     
 }
