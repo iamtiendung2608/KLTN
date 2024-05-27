@@ -13,7 +13,7 @@ public interface TransactionEventMapper {
     ItemAttributeEvent toEvent(ItemEntity item, Integer quantity);
     
     @Mapping(target = "order_id", source="id")
-    @Mapping(target = "created_at", ignore = true)
-    @Mapping(target = "created_by", source="order.organization.name")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", source="order.organization.name")
     OrderEvent toEvent(OrderEntity order);
 }

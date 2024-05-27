@@ -11,6 +11,8 @@ public record CustomerSearchRequest(
         QCustomerEntity qCustomerEntity = QCustomerEntity.customerEntity;
         return new OptionalBooleanBuilder(qCustomerEntity.organization.id.eq(organizationId))
                 .notNullAnd(qCustomerEntity.fullName::containsIgnoreCase, keyword)
+                .notNullAnd(qCustomerEntity.address::containsIgnoreCase, keyword)
+                .notNullAnd(qCustomerEntity.email::containsIgnoreCase, keyword)
                 .notNullAnd(qCustomerEntity.isDeleted::eq, deleted).build();
     }
 }

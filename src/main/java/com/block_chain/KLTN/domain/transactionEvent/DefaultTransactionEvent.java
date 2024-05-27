@@ -138,7 +138,7 @@ public class DefaultTransactionEvent implements TransactionEventService {
         orderRepository.save(order);
         
         TransactionEventEntity transaction_event = TransactionEventEntity.builder()
-            .transaction_id(newTransaction.getId())
+            .transactionId(newTransaction.getId())
             .senderAddress(senderAddress)
             .receiverAddress(receiverAddress)
             .receiverName(receiverName)

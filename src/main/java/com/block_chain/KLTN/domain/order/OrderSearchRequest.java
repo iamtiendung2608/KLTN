@@ -22,7 +22,6 @@ public record OrderSearchRequest(
         QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
         
         return new OptionalBooleanBuilder(qOrderEntity.employeeId.isNull())
-            .notNullOr(qOrderEntity.employee.id::eq, employeeId)
             .notNullAnd(qOrderEntity.status::eq, status)
             .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
             .notNullAnd(qOrderEntity.paidType::eq, paidType)
