@@ -18,3 +18,13 @@ Content-Type: application/json
   "address": "1/23 Đ.Linh Đông",
   "locationTagId": 114
 }
+
+### search customer 
+GET {{host}}/customer
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "keyword": "",
+  "deleted": "false"
+}
