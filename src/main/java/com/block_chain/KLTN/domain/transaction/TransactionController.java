@@ -28,9 +28,8 @@ public class TransactionController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasAuthority('super_admin') or hasAuthority('employee')")
     public CreateTransactionResponse createTransaction(@RequestBody CreateTransactionRequest request) {
         return transactionService.createTransaction(request);
     }
-    
-
 }
