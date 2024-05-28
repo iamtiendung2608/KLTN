@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('super_admin') or hasAuthority('employee')")
 public class TransactionController {
 
     private final TransactionQueryService transactionQueryService;
