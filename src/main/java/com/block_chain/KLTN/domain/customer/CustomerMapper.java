@@ -1,7 +1,5 @@
 package com.block_chain.KLTN.domain.customer;
 
-import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
