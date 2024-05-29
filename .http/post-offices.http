@@ -1,0 +1,12 @@
+###
+GET http://localhost:8080/post-offices?keyword=&page=0&size=10
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpZCI6Miwicm9sZSI6WyJ1c2VyIl0sImVtYWlsIjoicHRkdW5nMjYwOEBnbWFpbC5jb20iLCJzdGF0dXMiOiJBQ1RJVkUiLCJhdXRoZW50aWNhdGlvbk9iamVjdCI6IlVzZXIiLCJpYXQiOjE3MTQ3MjMyNzAsImV4cCI6MTcxNTU4NzI3MH0.qmeeX2yCGlFBEFDu2t-aLWjgTRGBgE4s_8qPP_IODv8Q7eUnXudPt8lliHsJWDzEIMVU5jFegCgkqDRmFSfJ0w
+
+
+
+###
+PUT http://localhost:8080/admin/post-offices/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJpZCI6NSwicm9sZSI6WyJzdXBlcl9hZG1pbiJdLCJlbWFpbCI6InB0ZHVuZzI2MDAwQGdtYWlsLmNvbSIsInN0YXR1cyI6IkFDVElWRSIsImF1dGhlbnRpY2F0aW9uT2JqZWN0IjoiVXNlciIsImlhdCI6MTcxNjU2MDM3MiwiZXhwIjoxNzE3NDI0MzcyfQ.m2J7zYErBzTi7GkOoOY4-_SvfJxW5CFKE-NZZxuHVyK3O-5YyJfu6IUw1-03ZM6pIY13UMMoAenbwryBxRWoyQ
+Content-Type: application/json
+
+{"name":"Bưu cục Lý Thái Tổ - Hà Nội","phone":"84985906116","address":"278 bạch đằnggg","longitude":"105.86167853","latitude":"21.02604497","sponsor":"Nguyễn Thị Vân Anh","sponsorPhone":"84985906116"}
