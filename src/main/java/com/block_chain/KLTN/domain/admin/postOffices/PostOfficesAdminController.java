@@ -41,7 +41,7 @@ public class PostOfficesAdminController {
         return postOfficesQueryService.searchPostOffices(request, pageable);
     }
 
-    @PutMapping("/")
+    @PutMapping("/{id}")
     public PostOfficesResponse updatePostOffices(@PathVariable("id") Long id, @RequestBody @Valid UpdatePostOfficesRequest request) {
         return postOfficesService.update(id, request);
     }

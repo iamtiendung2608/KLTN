@@ -65,7 +65,8 @@ public class DefaultPostOfficesService implements PostOfficesService {
         PostOfficesEntity postOffice = postOfficesRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "post office"));
 
-        if (postOfficesRepository.existsByCode(request.code())) {
+        if (!postOffice.getCode().equals(request.code()) 
+            && postOfficesRepository.existsByCode(request.code())) {
             throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "code post office exists");
         }
         if (postOfficesRepository.existsByName(request.name())){
