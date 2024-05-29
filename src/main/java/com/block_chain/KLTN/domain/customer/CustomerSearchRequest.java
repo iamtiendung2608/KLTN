@@ -1,7 +1,5 @@
 package com.block_chain.KLTN.domain.customer;
 
-import org.hibernate.event.spi.PreDeleteEvent;
-
 import com.block_chain.KLTN.common.OptionalBooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
