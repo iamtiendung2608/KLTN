@@ -61,7 +61,7 @@ public class DefaultTransactionService implements TransactionService {
         if (Objects.nonNull(oldTransaction)) {
             if (oldTransaction.getStatus().equals(TransactionStatus.DELIVERED) || 
                 oldTransaction.getStatus().getStep() > request.status().getStep() ||
-                oldTransaction.getStatus().getStep() == request.status().getStep()) {
+                oldTransaction.getStatus() == request.status()) {
                 throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
             }
         }
