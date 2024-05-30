@@ -322,7 +322,6 @@
                              referencedTableName="post_offices"
                              referencedColumnNames="id"/>
   </changeSet>
-<<<<<<< HEAD
 
   <changeSet id="1.0.16" author="toan.nguyen">
     <dropForeignKeyConstraint baseTableName="wallet" constraintName="wallet_user_id_fk"/>
@@ -410,7 +409,4 @@
       </column>
     </addColumn>
   </changeSet>
-=======
-  
->>>>>>> 33bf250 (merge new code)
 </databaseChangeLog>
