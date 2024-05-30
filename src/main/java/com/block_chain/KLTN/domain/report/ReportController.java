@@ -23,8 +23,8 @@ public class ReportController {
         return ResponseEntity.ok(reportQueryService.getReportTop());
     }
 
-    @GetMapping("/metric")
-    public ResponseEntity<ReportMetricResponse> getMetricReport() {
+    @GetMapping("/metric-user")
+    public ResponseEntity<ReportMetricResponse> getUserMetric() {
         return ResponseEntity.ok(reportQueryService.getReportMetric());
     }
 }

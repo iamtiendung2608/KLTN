@@ -9,10 +9,7 @@ public record PostOfficesSearchRequest(
     public Predicate toPredicate() {
         QPostOfficesEntity qPostOfficesEntity = QPostOfficesEntity.postOfficesEntity;
         return new OptionalBooleanBuilder(qPostOfficesEntity.deleted.eq(false))
-                .notNullOr(qPostOfficesEntity.name::containsIgnoreCase, keyword)
-                .notNullOr(qPostOfficesEntity.phone::contains, keyword)
-                .notNullOr(qPostOfficesEntity.address::contains, keyword)
-                .notNullOr(qPostOfficesEntity.sponsor::contains, keyword)
+                .notBlankAnd(qPostOfficesEntity.name::containsIgnoreCase, keyword)
                 .build();
     }
 }

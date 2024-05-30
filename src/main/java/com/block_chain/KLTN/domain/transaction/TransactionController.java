@@ -28,10 +28,8 @@ public class TransactionController {
         return ResponseEntity.ok(transactionQueryService.getTransaction(orderId));
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public CreateTransactionResponse createTransaction(@RequestBody CreateTransactionRequest request) {
         return transactionService.createTransaction(request);
     }
-    
-
 }
