@@ -35,17 +35,22 @@ public class DefaultTransactionService implements TransactionService {
     @Transactional
     public CreateTransactionResponse createTransaction(CreateTransactionRequest request) {
         UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        EmployeeEntity employee = employeeRepository.findByEmail(userDetail.getUsername())
-            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
         TransactionEntity oldTransaction = transactionRepository.findLastTransaction(request.orderId());
         OrderEntity order = orderRepository.findById(request.orderId())
                 .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
+        
+        EmployeeEntity employee = null;
+        if (request.status() != TransactionStatus.CREATED){
+            employee = employeeRepository.findByEmail(userDetail.getUsername())
+                .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Employee"));
+        }
+        
         TransactionEntity transaction = TransactionEntity.builder()
-                    .status(request.status())
-                    .note(request.note())
-                    .orderId(request.orderId())
-                    .order(order)
-                    .build();
+            .status(request.status())
+            .note(request.note())
+            .orderId(request.orderId())
+            .order(order)
+            .build();
         PostOfficesEntity postOffice = null;
 
         if (Objects.nonNull(order.getEmployeeId()) && 
@@ -55,7 +60,8 @@ public class DefaultTransactionService implements TransactionService {
 
         if (Objects.nonNull(oldTransaction)) {
             if (oldTransaction.getStatus().equals(TransactionStatus.DELIVERED) || 
-                oldTransaction.getStatus().getStep() > request.status().getStep()) {
+                oldTransaction.getStatus().getStep() > request.status().getStep() ||
+                oldTransaction.getStatus() == request.status()) {
                 throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
             }
         }
@@ -79,6 +85,9 @@ public class DefaultTransactionService implements TransactionService {
                 break;
             }
             case DELIVERED:{
+                if (oldTransaction.getPostOfficeId() != request.postOfficeId()) {
+                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
+                }
                 transaction.setPostOffice(postOffice);
                 transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(null);
@@ -91,6 +100,9 @@ public class DefaultTransactionService implements TransactionService {
                 break;
             }
             case TRANSPORTED:{
+                if (oldTransaction.getPostOfficeId() != request.postOfficeId()) {
+                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
+                }
                 transaction.setPostOffice(postOffice);
                 transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(null);
@@ -126,7 +138,6 @@ public class DefaultTransactionService implements TransactionService {
         applicationEventPublisher.publishEvent(new CreateTransactionEvent(oldTransaction, transaction));
         return new CreateTransactionResponse(transaction.getId());
     }
-
 
     /*
     * We dont need this

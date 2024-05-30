@@ -13,9 +13,9 @@ public record EmployeeSearchRequest(
         QEmployeeEntity qEmployee = QEmployeeEntity.employeeEntity;
         return new OptionalBooleanBuilder(qEmployee.id.gt(0L)) //modify default condition later
                 .notNullAnd(qEmployee.locationTagId::eq, locationTagId)
-                // .notNullAnd(qEmployee.postOfficeId::eq, postOfficeId)
-                .notBlankAnd(qEmployee.name::containsIgnoreCase, keyword)
-                .notBlankAnd(qEmployee.email::containsIgnoreCase, keyword)
+                .notEmptyAndMultipleOr(keyword, 
+                    qEmployee.name::containsIgnoreCase, 
+                    qEmployee.email::containsIgnoreCase)
                 .build();
     }
 }

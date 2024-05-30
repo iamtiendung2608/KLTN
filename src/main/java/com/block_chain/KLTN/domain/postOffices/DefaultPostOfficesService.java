@@ -61,6 +61,18 @@ public class DefaultPostOfficesService implements PostOfficesService {
     public PostOfficesResponse update(Long id, UpdatePostOfficesRequest request) {
         PostOfficesEntity postOffice = postOfficesRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "post office"));
+      
+        if (request.code().isEmpty()) {
+            request = request.updateCode(postOffice.getCode());
+        }
+        if (!(postOffice.getCode().equals(request.code())) 
+            && postOfficesRepository.existsByCode(request.code())) {
+            throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "code post office exists");
+        }
+        if (!postOffice.getName().equals(request.name()) &&
+            postOfficesRepository.existsByName(request.name())){
+            throw new BusinessException(ErrorMessage.RESOURCE_EXISTS, "name post office exists");
+        }
 
         postOfficesMapper.updateEntity(postOffice, request);
         postOfficesRepository.save(postOffice);

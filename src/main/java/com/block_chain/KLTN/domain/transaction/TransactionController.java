@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('super_admin') or hasAuthority('employee')")
 public class TransactionController {
 
     private final TransactionQueryService transactionQueryService;
@@ -29,9 +28,8 @@ public class TransactionController {
     }
 
     @PostMapping("/")
+    @PreAuthorize("hasAuthority('super_admin') or hasAuthority('employee')")
     public CreateTransactionResponse createTransaction(@RequestBody CreateTransactionRequest request) {
         return transactionService.createTransaction(request);
     }
-    
-
 }
