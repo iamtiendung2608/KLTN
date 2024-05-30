@@ -6,9 +6,11 @@ import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
 import com.block_chain.KLTN.security.UserPrincipal;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,7 +38,8 @@ public class DefaultCustomerQueryService implements CustomerQueryService {
 
     @Override
     public Page<CustomerResponse> searchCustomer(UserPrincipal user, CustomerSearchRequest request, Pageable pageable) {
-        UserEntity userEntity = userRepository.findById(user.getId()).orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
+        UserEntity userEntity = userRepository.findById(user.getId())
+            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
         return customerRepository.findAll(request.toPredicate(userEntity.getOrganizationId()), pageable).map(customerMapper::toResponse);
     }
 

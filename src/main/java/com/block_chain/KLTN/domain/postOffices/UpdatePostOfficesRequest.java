@@ -9,7 +9,10 @@ public record UpdatePostOfficesRequest(
     @NotEmpty String sponsor,
     @NotEmpty String longitude,
     @NotEmpty String latitude,
+    @NotEmpty String code,
     @NotEmpty String sponsorPhone
 ) {
-
+    public UpdatePostOfficesRequest updateCode(String newCode) {
+        return new UpdatePostOfficesRequest(name, phone, address, sponsor, longitude, latitude, newCode, sponsorPhone);
+    }
 }

@@ -9,10 +9,10 @@ public record CustomerSearchRequest(
 ) {
     public Predicate toPredicate(long organizationId) {
         QCustomerEntity qCustomerEntity = QCustomerEntity.customerEntity;
-        return new OptionalBooleanBuilder(qCustomerEntity.organization.id.eq(organizationId))
-                .notNullAnd(qCustomerEntity.fullName::containsIgnoreCase, keyword)
-                .notNullAnd(qCustomerEntity.address::containsIgnoreCase, keyword)
-                .notNullAnd(qCustomerEntity.email::containsIgnoreCase, keyword)
+        return new OptionalBooleanBuilder(qCustomerEntity.organizationId.eq(organizationId))
+                .notEmptyAndMultipleOr(keyword, qCustomerEntity.fullName::contains, 
+                    qCustomerEntity.email::containsIgnoreCase, 
+                    qCustomerEntity.address::containsIgnoreCase)
                 .notNullAnd(qCustomerEntity.isDeleted::eq, deleted).build();
     }
 }
