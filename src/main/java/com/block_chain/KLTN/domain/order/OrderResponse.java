@@ -7,6 +7,8 @@ public record OrderResponse(
     OrderStatus status,
     float totalWeight,
     float totalPrice,
+    float feePaid,
+    float subTotal,
     OffsetDateTime deliveryAt,
     DeliveryType deliveryType,
     OffsetDateTime createdAt
