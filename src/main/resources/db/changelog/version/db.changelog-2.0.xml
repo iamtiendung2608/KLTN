@@ -21,4 +21,16 @@
     <changeSet id="2.0.3" author="toan.nguyen">
         <renameColumn tableName="employee" oldColumnName="create_at" newColumnName="created_at" />
     </changeSet>
+
+    <changeSet id="2.0.4" author="toan.nguyen">
+        <addColumn tableName="customer">
+            <column name="created_at" type="timestamp"/>
+            <column name="modified_at" type="timestamp"/>
+        </addColumn>
+
+        <addColumn tableName="users">
+            <column name="created_at" type="timestamp"/>
+            <column name="modified_at" type="timestamp"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

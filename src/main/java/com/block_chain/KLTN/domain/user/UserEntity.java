@@ -1,5 +1,6 @@
 package com.block_chain.KLTN.domain.user;
 
+import com.block_chain.KLTN.common.AbstractEntity;
 import com.block_chain.KLTN.domain.organization.OrganizationEntity;
 import com.block_chain.KLTN.domain.user.role.RoleEntity;
 import lombok.*;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(schema = "public", name = "users")
-public class UserEntity {
+public class UserEntity extends AbstractEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

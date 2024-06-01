@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/admin/customer")
 @RequiredArgsConstructor
-public class CustomerAdminController {
+public class CustomerAdminController{
     private final CustomerQueryService customerQueryService;
 
     @GetMapping("/")
