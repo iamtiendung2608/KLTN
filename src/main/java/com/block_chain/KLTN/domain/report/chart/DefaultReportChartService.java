@@ -1,34 +1,27 @@
 package com.block_chain.KLTN.domain.report.chart;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
 import com.block_chain.KLTN.domain.admin.report.ReportAdminChartDetail;
 import com.block_chain.KLTN.domain.admin.report.ReportAdminChartResponse;
 import com.block_chain.KLTN.domain.order.OrderRepository;
 import com.block_chain.KLTN.domain.order.OrderStatus;
 import com.block_chain.KLTN.domain.order.QOrderEntity;
-import com.block_chain.KLTN.domain.user.UserEntity;
-import com.block_chain.KLTN.domain.user.UserRepository;
-import com.block_chain.KLTN.exception.BusinessException;
-import com.block_chain.KLTN.exception.ErrorMessage;
-import com.querydsl.core.types.Predicate;
+import com.block_chain.KLTN.security.UserPrincipal;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQuery;
-
-import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultReportChartService implements ReportChartService {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    private final List<OrderStatus> statuses = List.of(OrderStatus.CREATED, OrderStatus.DELIVERED, OrderStatus.TRANSPORTED);
 
     @PersistenceContext
     EntityManager entityManager;
@@ -36,30 +29,37 @@ public class DefaultReportChartService implements ReportChartService {
 
     @Override
     public ReportChartResponse getReportChart() {
-        UserDetails userDetail = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity userEntity = userRepository.findByEmail(userDetail.getUsername())
-            .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "User"));
+        UserPrincipal userDetails = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         ReportChartResponse response = new ReportChartResponse();
         QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
-        List<ReportChartDetail> details = new ArrayList<>();
 
-        for (OrderStatus status : OrderStatus.values()) {
-            JPAQuery<Integer> query = new JPAQuery<>(entityManager);
-            Predicate predicate = qOrderEntity.status.eq(status)
-                .and(qOrderEntity.organizationId.eq(userEntity.getOrganizationId()));
+        JPAQuery<Tuple> query = new JPAQuery<>(entityManager)
+            .select(qOrderEntity.status, qOrderEntity.count())
+            .from(qOrderEntity)
+            .where(qOrderEntity.status.in(statuses).and(qOrderEntity.organizationId.eq(userDetails.getOrganizationId())))
+            .groupBy(qOrderEntity.status);
 
-            ReportChartDetail detail = new ReportChartDetail(
-                    status,
-                    query.select(qOrderEntity.id)
-                        .from(qOrderEntity)
-                        .where(predicate)
-                        .fetch().size());
-            
-            details.add(detail);
-        }
+        List<Tuple> results = query.fetch();
+
+        Map<OrderStatus, Long> statusCounts = results.stream()
+            .collect(Collectors.toMap(
+                tuple -> tuple.get(qOrderEntity.status),
+                tuple -> tuple.get(qOrderEntity.count())
+            ));
+
+        List<ReportChartDetail> details = statusCounts.entrySet().stream()
+            .map(entry -> {
+                ReportChartDetail detail = new ReportChartDetail();
+                detail.setStatus(entry.getKey());
+                detail.setCount(entry.getValue());
+                return detail;
+            })
+            .collect(Collectors.toList());
 
         response.setDetails(details);
         response.setTotal(orderRepository.count());
+
         return response;
     }
 
@@ -67,20 +67,29 @@ public class DefaultReportChartService implements ReportChartService {
     public ReportAdminChartResponse getAdminReportChart() {
         ReportAdminChartResponse response = new ReportAdminChartResponse();
         QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
-        List<ReportAdminChartDetail> details = new ArrayList<>();
 
-        for (OrderStatus status : OrderStatus.values()) {
-            if (status == OrderStatus.DRAFT) continue;
-            JPAQuery<Integer> query = new JPAQuery<>(entityManager);
-            ReportAdminChartDetail detail = new ReportAdminChartDetail(
-                    status,
-                    query.select(qOrderEntity.id)
-                        .from(qOrderEntity)
-                        .where(qOrderEntity.status.eq(status))
-                        .fetch().size());
-            
-            details.add(detail);
-        }
+        JPAQuery<Tuple> query = new JPAQuery<>(entityManager)
+            .select(qOrderEntity.status, qOrderEntity.count())
+            .from(qOrderEntity)
+            .where(qOrderEntity.status.in(statuses))
+            .groupBy(qOrderEntity.status);
+
+        List<Tuple> results = query.fetch();
+
+        Map<OrderStatus, Long> statusCounts = results.stream()
+            .collect(Collectors.toMap(
+                tuple -> tuple.get(qOrderEntity.status),
+                tuple -> tuple.get(qOrderEntity.count())
+            ));
+
+        List<ReportAdminChartDetail> details = statusCounts.entrySet().stream()
+            .map(entry -> {
+                ReportAdminChartDetail detail = new ReportAdminChartDetail();
+                detail.setStatus(entry.getKey());
+                detail.setCount(entry.getValue());
+                return detail;
+            })
+            .collect(Collectors.toList());
 
         response.setDetails(details);
         response.setTotal(orderRepository.count());

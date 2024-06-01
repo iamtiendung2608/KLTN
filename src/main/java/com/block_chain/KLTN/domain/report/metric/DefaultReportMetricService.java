@@ -9,18 +9,15 @@ import com.block_chain.KLTN.domain.user.UserEntity;
 import com.block_chain.KLTN.domain.user.UserRepository;
 import com.block_chain.KLTN.exception.BusinessException;
 import com.block_chain.KLTN.exception.ErrorMessage;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 
 @Service
 @RequiredArgsConstructor
@@ -66,15 +63,28 @@ public class DefaultReportMetricService implements ReportMetricService {
             .from(qOrderEntity)
             .fetchOne());
 
+        response.setCurrentSubtotal(subTotalQuery.select(qOrderEntity.subTotal.sum())
+            .where(qOrderEntity.organizationId.eq(userEntity.getOrganizationId()).and(qOrderEntity.createdAt.after(OffsetDateTime.now(ZoneOffset.UTC).minusDays(1))))
+            .from(qOrderEntity)
+            .fetchOne());
+
         response.setTotalOrder(totalOrderQuery.select(qOrderEntity.id)
             .where(qOrderEntity.organizationId.eq(userEntity.getOrganizationId()))
             .from(qOrderEntity)
             .fetch().size());
 
-        response.setTotalCustomer(totalCustomerQuery.select(qCustomerEntity.id)
-            .where(qCustomerEntity.organizationId.eq(userEntity.getOrganizationId()))
-            .from(qCustomerEntity)
+        response.setCurrentOrder(totalOrderQuery.select(qOrderEntity.id)
+            .where(qOrderEntity.organizationId.eq(userEntity.getOrganizationId()).and(qOrderEntity.createdAt.after(OffsetDateTime.now(ZoneOffset.UTC).minusDays(1))))
+            .from(qOrderEntity)
             .fetch().size());
+
+        response.setTotalCustomer(totalCustomerQuery.select(qCustomerEntity.id.count())
+            .where(qCustomerEntity.organizationId.eq(userEntity.getOrganizationId()))
+            .from(qCustomerEntity).fetchCount());
+
+//        response.setCurrentCustomer(totalCustomerQuery.select(qCustomerEntity.id.count())
+//            .where(qCustomerEntity.organizationId.eq(userEntity.getOrganizationId()).and(qCustomerEntity.createdAt.after(OffsetDateTime.now(ZoneOffset.UTC).minusDays(1))))
+//            .from(qCustomerEntity).fetchCount());
         return response;
     }
 }
