@@ -7,7 +7,8 @@ public record OrderSearchRequest(
     Long customerId,
     OrderStatus status,
     DeliveryType deliveryType,
-    PaidType paidType
+    PaidType paidType,
+    String keyword
 ) {
     public Predicate toPredicate(Long organizationId) {
         QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
@@ -15,6 +16,7 @@ public record OrderSearchRequest(
                 .notNullAnd(qOrderEntity.status::eq, status)
                 .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
                 .notNullAnd(qOrderEntity.paidType::eq, paidType)
+                .notBlankAnd(qOrderEntity.status.stringValue()::containsIgnoreCase, keyword)
                 .build();
     }
 
