@@ -124,12 +124,12 @@ public class DefaultTransactionService implements TransactionService {
             case DELIVERING:{
                 if (Objects.nonNull(request.postOfficeId())){
                     if (!oldTransaction.getPostOfficeId().equals(request.postOfficeId())) {
-                        throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "The postoffice is not the same when transporting");
+                        throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "This postoffice is not contain this order");
                     }
                 }else{
                     postOffice = oldTransaction.getPostOffice();
                 }
-                
+
                 transaction.setPostOffice(postOffice);
                 transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(employee);
