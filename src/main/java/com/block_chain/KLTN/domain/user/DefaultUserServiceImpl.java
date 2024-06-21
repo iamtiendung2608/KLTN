@@ -61,7 +61,7 @@ public class DefaultUserServiceImpl implements UserService {
             throw new BusinessException(ErrorMessage.OLD_PASSWORD_MISMATCH, userEntity.getEmail());
         }
 
-        if (!passwordEncoder.matches(request.newPassword(), request.confirmPassword())) {
+        if (!request.newPassword().equals(request.confirmPassword())) {
             throw new BusinessException(ErrorMessage.CONFIRM_PASSWORD_MISMATCH);
         }
         userEntity.setPassword(passwordEncoder.encode(request.newPassword()));

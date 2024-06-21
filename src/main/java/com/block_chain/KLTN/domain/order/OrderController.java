@@ -43,4 +43,10 @@ public class OrderController {
     public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable("id") Long id) {
         return orderQueryService.getOrderDetail(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
+
+    
+    @GetMapping("/track/{id}")
+    public OrderLocationResponse getOrderLocation(Long id) {
+        return orderQueryService.getOrderLocation(id);
+    }
 }
