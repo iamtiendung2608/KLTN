@@ -19,4 +19,10 @@ public class LocationTagEntity {
     private String province;
     private String district;
     private String ward;
+
+    @Override
+    public String toString() {
+        return String.format("%s, %s, %s", ward, district, province);
+    }
+
 }
