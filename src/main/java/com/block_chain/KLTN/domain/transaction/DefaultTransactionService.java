@@ -85,24 +85,18 @@ public class DefaultTransactionService implements TransactionService {
                 break;
             }
             case DELIVERED:{
-                if (oldTransaction.getPostOfficeId() != request.postOfficeId()) {
-                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
-                }
-                transaction.setPostOffice(postOffice);
-                transaction.setPostOfficeId(postOffice.getId());
-                transaction.setEmployee(null);
-                transaction.setEmployeeId(null);
-
                 order.getReceiverObject().setPostOffices(postOffice);
                 order.getReceiverObject().setPostOfficeId(postOffice.getId());
-                order.setEmployee(null);
-                order.setEmployeeId(null);
-                break;
             }
             case TRANSPORTED:{
-                if (oldTransaction.getPostOfficeId() != request.postOfficeId()) {
-                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Fail to update transaction status");
+                if (Objects.nonNull(request.postOfficeId())){
+                    if (!oldTransaction.getPostOfficeId().equals(request.postOfficeId())) {
+                        throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "The postoffice is not the same when transporting");
+                    }
+                }else{
+                    postOffice = oldTransaction.getPostOffice();
                 }
+                
                 transaction.setPostOffice(postOffice);
                 transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(null);
@@ -110,10 +104,32 @@ public class DefaultTransactionService implements TransactionService {
 
                 order.setEmployee(null);
                 order.setEmployeeId(null);
+                
                 break;
             }
-            case DELIVERING:
             case TRANSPORTING:{
+                if (oldTransaction.getPostOfficeId().equals(request.postOfficeId())) {
+                    throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "Cannot transport to the same postoffice");
+                } 
+
+                transaction.setPostOffice(postOffice);
+                transaction.setPostOfficeId(postOffice.getId());
+                transaction.setEmployee(employee);
+                transaction.setEmployeeId(employee.getId());
+
+                order.setEmployee(employee);
+                order.setEmployeeId(employee.getId());
+                break;
+            }
+            case DELIVERING:{
+                if (Objects.nonNull(request.postOfficeId())){
+                    if (!oldTransaction.getPostOfficeId().equals(request.postOfficeId())) {
+                        throw new BusinessException(ErrorMessage.INVALID_REQUEST_PARAMETER, "This postoffice is not contain this order");
+                    }
+                }else{
+                    postOffice = oldTransaction.getPostOffice();
+                }
+
                 transaction.setPostOffice(postOffice);
                 transaction.setPostOfficeId(postOffice.getId());
                 transaction.setEmployee(employee);
