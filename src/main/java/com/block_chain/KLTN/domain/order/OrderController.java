@@ -46,7 +46,7 @@ public class OrderController {
 
     
     @GetMapping("/track/{id}")
-    public OrderLocationResponse getOrderLocation(Long id) {
+    public OrderLocationResponse getOrderLocation(@PathVariable("id") Long id) {
         return orderQueryService.getOrderLocation(id);
     }
 }

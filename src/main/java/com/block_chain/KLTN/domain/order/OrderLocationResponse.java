@@ -10,4 +10,6 @@ import lombok.Data;
 public class OrderLocationResponse{
     Long id;
     String location;
+    String currentOwner;
+    OrderStatus status;
 }
