@@ -76,25 +76,29 @@ public class DefaultOrderQueryService implements OrderQueryService{
     public OrderLocationResponse getOrderLocation(Long id) {
         OrderEntity order = orderRepository.findById(id)
             .orElseThrow(() -> new BusinessException(ErrorMessage.RESOURCE_NOT_FOUND, "Order"));
-        String location;
+        String location, currentOwner;
         switch (order.getStatus()) {
             case DRAFT:
             case CREATED:
                 location = getLocation(order.getSenderObject().getCustomer().getLocationTag(), 
                                             order.getSenderObject().getCustomer().getAddress());
+                currentOwner = order.getSenderObject().getCustomer().getFullName();
                 break; 
             case DELIVERED:
                 location = getLocation(order.getReceiverObject().getCustomer().getLocationTag(), 
                                             order.getReceiverObject().getCustomer().getAddress());
+                currentOwner = order.getReceiverObject().getCustomer().getFullName();
                 break;
             default:
                 TransactionEntity transaction = transactionRepository.findLastTransaction(order.getId());
                 location = getLocation(transaction.getPostOffice().getLocationTag(), 
                                             transaction.getPostOffice().getAddress());
+                
+                currentOwner = transaction.getPostOffice().getName();
                 break;
         }
 
-        return new OrderLocationResponse(order.getId(), location);
+        return new OrderLocationResponse(order.getId(), location, currentOwner, order.getStatus());
     }
 
     private String getLocation(LocationTagEntity locationTag, String address){
