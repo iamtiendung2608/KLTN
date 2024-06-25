@@ -23,7 +23,7 @@ public record OrderSearchRequest(
     public Predicate employeeToPredicte(Long employeeId) {
         QOrderEntity qOrderEntity = QOrderEntity.orderEntity;
         
-        return new OptionalBooleanBuilder(qOrderEntity.employeeId.isNull())
+        return new OptionalBooleanBuilder(qOrderEntity.employeeId.isNull().and(qOrderEntity.status.ne(OrderStatus.DELIVERED)))
             .notNullAnd(qOrderEntity.status::eq, status)
             .notNullAnd(qOrderEntity.deliveryType::eq, deliveryType)
             .notNullAnd(qOrderEntity.paidType::eq, paidType)
